@@ -409,15 +409,15 @@
 
       // 4. DELICATE CENTER HUB SPIRAL (NO BLINDING SPOTLIGHT BEHIND TEXT)
       // Small silk anchor ring
-      this.ctx.strokeStyle = 'rgba(235, 242, 255, 0.32)';
-      this.ctx.lineWidth = 0.8;
+      this.ctx.strokeStyle = 'rgba(235, 242, 255, 0.14)';
+      this.ctx.lineWidth = 0.5;
       this.ctx.beginPath();
       this.ctx.arc(center.x, center.y, 8, 0, Math.PI * 2);
       this.ctx.stroke();
 
-      // Subtle soft central glow (tiny 12px radius, completely transparent so text stays 100% crisp)
+      // Subtle soft central glow
       const hubGrad = this.ctx.createRadialGradient(center.x, center.y, 0, center.x, center.y, 12);
-      hubGrad.addColorStop(0, 'rgba(235, 242, 255, 0.14)');
+      hubGrad.addColorStop(0, 'rgba(235, 242, 255, 0.06)');
       hubGrad.addColorStop(1, 'rgba(235, 242, 255, 0)');
       this.ctx.fillStyle = hubGrad;
       this.ctx.beginPath();

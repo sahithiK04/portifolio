@@ -46,36 +46,65 @@ let currentAngle = 0;
 let inDeadzone = true;
 let isModalOpen = false;
 
-// 4. PRELOAD WEBP FRAMES (0..63 + center.webp)
+// 4. PROGRESSIVE ASSET LOADING (Instant entry + smooth background hydration)
 function preloadAssets() {
-  const allImagesToLoad = TOTAL_FRAMES + 1;
+  const isMobile = window.innerWidth <= 768 || ('ontouchstart' in window);
+  let dismissed = false;
+
+  function dismissLoader() {
+    if (dismissed) return;
+    dismissed = true;
+    isReady = true;
+    if (loaderProgress) {
+      loaderProgress.style.width = '100%';
+    }
+    setTimeout(() => {
+      if (loadingScreen) {
+        loadingScreen.classList.add('hidden');
+      }
+    }, 200);
+  }
+
+  // Safety fallback: Never keep visitor waiting longer than 1.2s regardless of network speed
+  setTimeout(dismissLoader, 1200);
 
   function updateProgress() {
     loadedCount++;
-    const pct = Math.round((loadedCount / allImagesToLoad) * 100);
-    if (loaderProgress) {
-      loaderProgress.style.width = pct + '%';
+    const pct = Math.min(100, Math.round((loadedCount / (TOTAL_FRAMES + 1)) * 100));
+    if (loaderProgress && !dismissed) {
+      loaderProgress.style.width = `${pct}%`;
     }
 
-    if (loadedCount >= allImagesToLoad) {
-      isReady = true;
-      setTimeout(() => {
-        loadingScreen.classList.add('hidden');
-      }, 250);
+    // Dismiss early once center frame + minimum initial frames are ready (or instantly on mobile)
+    if (!dismissed) {
+      if (isMobile && centerImage && centerImage.complete) {
+        dismissLoader();
+      } else if (loadedCount >= 8 && centerImage && centerImage.complete) {
+        dismissLoader();
+      }
     }
   }
 
-  // Load clean center neutral frame
+  // 1. High priority: Load neutral center hero frame
   centerImage = new Image();
   centerImage.src = 'frames/center.webp';
-  centerImage.onload = updateProgress;
+  centerImage.onload = () => {
+    updateProgress();
+    if (isMobile) dismissLoader();
+  };
   centerImage.onerror = () => {
     centerImage.src = 'public/frames/center.webp';
-    centerImage.onload = updateProgress;
-    centerImage.onerror = updateProgress;
+    centerImage.onload = () => {
+      updateProgress();
+      if (isMobile) dismissLoader();
+    };
+    centerImage.onerror = () => {
+      updateProgress();
+      dismissLoader();
+    };
   };
 
-  // Load 64 clean circular frames
+  // 2. Load 64 circular tracking frames in background
   for (let i = 0; i < TOTAL_FRAMES; i++) {
     const img = new Image();
     img.src = `frames/frame_${i}.webp`;
@@ -199,11 +228,12 @@ function render() {
       let norm = currentAngle % (2 * Math.PI);
       if (norm < 0) norm += 2 * Math.PI;
       const frameIdx = Math.round((norm / (2 * Math.PI)) * TOTAL_FRAMES) % TOTAL_FRAMES;
-      frameToDraw = images[frameIdx] || centerImage;
+      const candidate = images[frameIdx];
+      frameToDraw = (candidate && candidate.complete && candidate.naturalWidth > 0) ? candidate : centerImage;
     }
 
     // Crisp 100% opacity frame draw (no alpha ghosting)
-    if (frameToDraw && frameToDraw.complete) {
+    if (frameToDraw && frameToDraw.complete && frameToDraw.naturalWidth > 0) {
       ctx.fillStyle = BG_HEX;
       ctx.fillRect(0, 0, canvasW, canvasH);
       ctx.drawImage(frameToDraw, offsetX, offsetY, renderW, renderH);

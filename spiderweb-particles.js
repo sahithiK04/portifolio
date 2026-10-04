@@ -38,7 +38,7 @@
       this.numRings = 28;
       this.dewDrops = [];
       this.particles = [];
-      this.maxParticles = 200;
+      this.maxParticles = 40;
 
       // Subtle outward energy pulses
       this.pulseWaves = [];
@@ -324,25 +324,25 @@
         const outerX = center.x + Math.cos(angle) * (maxR * webPulse);
         const outerY = center.y + Math.sin(angle) * (maxR * webPulse);
 
-        // Luminous celestial silver silk gradient: clearly visible yet porous so text reads perfectly
+        // Luminous celestial silver silk gradient: soft whisper so text reads perfectly
         const grad = this.ctx.createLinearGradient(center.x, center.y, outerX, outerY);
-        grad.addColorStop(0, 'rgba(235, 242, 255, 0.32)');
-        grad.addColorStop(0.3, 'rgba(230, 240, 255, 0.25)');
-        grad.addColorStop(0.7, 'rgba(220, 235, 255, 0.18)');
-        grad.addColorStop(1, 'rgba(215, 230, 255, 0.10)');
+        grad.addColorStop(0, 'rgba(235, 242, 255, 0.16)');
+        grad.addColorStop(0.3, 'rgba(230, 240, 255, 0.12)');
+        grad.addColorStop(0.7, 'rgba(220, 235, 255, 0.08)');
+        grad.addColorStop(1, 'rgba(215, 230, 255, 0.04)');
 
         this.ctx.strokeStyle = grad;
-        this.ctx.lineWidth = 0.75; // Crisp hairline silk thread
+        this.ctx.lineWidth = 0.55; // Delicate hairline silk thread
         this.ctx.beginPath();
         this.ctx.moveTo(center.x, center.y);
         this.ctx.lineTo(outerX, outerY);
         this.ctx.stroke();
 
         // Tip node at the outer window sides
-        const tipGlow = Math.sin(this.time * 0.06 + i * 0.4) * 0.25 + 0.6;
-        this.ctx.fillStyle = `rgba(235, 245, 255, ${tipGlow * 0.8})`;
+        const tipGlow = Math.sin(this.time * 0.06 + i * 0.4) * 0.2 + 0.4;
+        this.ctx.fillStyle = `rgba(235, 245, 255, ${tipGlow * 0.5})`;
         this.ctx.beginPath();
-        this.ctx.arc(outerX, outerY, 1.5, 0, Math.PI * 2);
+        this.ctx.arc(outerX, outerY, 1.2, 0, Math.PI * 2);
         this.ctx.fill();
       }
 
@@ -355,11 +355,11 @@
         const ringRipple = Math.sin(this.time * 0.04 - ring * 0.22) * 0.012;
         const radius = maxR * Math.pow(rRatio, 1.2) * (webPulse + ringRipple);
 
-        // Clearly visible silk thread alpha (starts at 0.26 near center, gently dims to 0.13 at far edges)
-        const ringAlpha = Math.max(0.12, (1 - rRatio * 0.52) * 0.26);
+        // Soft, slightly visible silk thread alpha
+        const ringAlpha = Math.max(0.04, (1 - rRatio * 0.55) * 0.13);
 
         this.ctx.strokeStyle = `rgba(225, 238, 255, ${ringAlpha})`;
-        this.ctx.lineWidth = 0.7; // Delicate hairline silk
+        this.ctx.lineWidth = 0.5; // Delicate hairline silk
         this.ctx.beginPath();
 
         for (let spoke = 0; spoke < this.numSpokes; spoke++) {
@@ -435,14 +435,14 @@
         const y = center.y + Math.sin(d.angle) * (d.radius * webPulse);
 
         const pulse = Math.sin(this.time * d.pulseSpeed + d.phase);
-        const glowAlpha = 0.35 + pulse * 0.4;
-        const radius = d.baseSize * (0.85 + pulse * 0.2);
+        const glowAlpha = 0.12 + pulse * 0.16;
+        const radius = d.baseSize * (0.8 + pulse * 0.15);
 
         // Soft halo
-        const haloRadius = radius * 2.6;
+        const haloRadius = radius * 2.2;
         const haloGrad = this.ctx.createRadialGradient(x, y, 0, x, y, haloRadius);
-        haloGrad.addColorStop(0, `rgba(235, 245, 255, ${glowAlpha * 0.55})`);
-        haloGrad.addColorStop(0.5, `rgba(220, 235, 255, ${glowAlpha * 0.15})`);
+        haloGrad.addColorStop(0, `rgba(235, 245, 255, ${glowAlpha * 0.35})`);
+        haloGrad.addColorStop(0.5, `rgba(220, 235, 255, ${glowAlpha * 0.08})`);
         haloGrad.addColorStop(1, 'rgba(220, 235, 255, 0)');
 
         this.ctx.fillStyle = haloGrad;
@@ -451,7 +451,7 @@
         this.ctx.fill();
 
         // Glistening crystal core
-        this.ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.9, glowAlpha + 0.2)})`;
+        this.ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.45, glowAlpha + 0.15)})`;
         this.ctx.beginPath();
         this.ctx.arc(x, y, Math.max(0.7, radius * 0.5), 0, Math.PI * 2);
         this.ctx.fill();
@@ -475,16 +475,16 @@
       for (let i = 0; i < this.particles.length; i++) {
         const p = this.particles[i];
         const twinkle = Math.sin(this.time * p.twinkleSpeed + p.twinkleOffset) * 0.25 + 0.75;
-        const alpha = Math.max(0, p.life * p.alpha * twinkle);
+        const alpha = Math.max(0, p.life * p.alpha * twinkle * 0.35);
         if (alpha <= 0.01) continue;
 
-        const size = p.size * (0.65 + 0.35 * p.life);
-        const glowRadius = size * 2.8;
+        const size = p.size * (0.6 + 0.3 * p.life);
+        const glowRadius = size * 2.0;
 
         // Particle halo
         const pGrad = this.ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowRadius);
-        pGrad.addColorStop(0, `rgba(${p.color}, ${alpha * 0.85})`);
-        pGrad.addColorStop(0.35, `rgba(${p.color}, ${alpha * 0.22})`);
+        pGrad.addColorStop(0, `rgba(${p.color}, ${alpha * 0.4})`);
+        pGrad.addColorStop(0.35, `rgba(${p.color}, ${alpha * 0.1})`);
         pGrad.addColorStop(1, `rgba(${p.color}, 0)`);
 
         this.ctx.fillStyle = pGrad;

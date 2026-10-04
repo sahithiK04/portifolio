@@ -38,7 +38,7 @@
       this.numRings = 28;
       this.dewDrops = [];
       this.particles = [];
-      this.maxParticles = 40;
+      this.maxParticles = 80;
 
       // Subtle outward energy pulses
       this.pulseWaves = [];

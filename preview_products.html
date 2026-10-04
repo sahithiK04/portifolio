@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zero-Box Products Designs — Sai Sahithi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0c0406;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 60px 24px 140px;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .main-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Page Header: Pure Typography, Zero Boxes */
+    .hero-header {
+      margin-bottom: 70px;
+      text-align: center;
+    }
+
+    .accent-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #e04b6c;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .hero-heading {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #ffffff 40%, #ffb3c6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+
+    .hero-sub {
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Section Separators */
+    .style-separator {
+      margin: 90px 0 50px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .sep-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(224, 75, 108, 0.3), transparent);
+    }
+
+    .sep-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      color: #ffccd5;
+      text-transform: uppercase;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Common Button */
+    .text-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      position: relative;
+      margin-top: 14px;
+    }
+
+    .text-link span {
+      position: relative;
+    }
+
+    .text-link span::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 100%;
+      height: 1.5px;
+      background: #e04b6c;
+      transform: scaleX(0.4);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+
+    .text-link:hover span::after {
+      transform: scaleX(1);
+    }
+
+    .text-link:hover {
+      color: #ffccd5;
+      gap: 12px;
+    }
+
+    /* =========================================================
+       STYLE A: CINEMATIC AMBIENT SPLIT (ABSOLUTELY ZERO BOXES)
+       Hardware floats directly inside organic atmospheric light
+       ========================================================= */
+    .ambient-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 100px;
+    }
+
+    .ambient-item {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      align-items: center;
+      gap: 60px;
+      position: relative;
+    }
+
+    .ambient-item.reverse {
+      grid-template-columns: 1fr 1.1fr;
+    }
+
+    /* Organic Floating Image with Soft Feathered Vignette */
+    .ambient-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Ambient backlight glow */
+    .ambient-visual::before {
+      content: '';
+      position: absolute;
+      width: 80%;
+      height: 80%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.22), transparent 70%);
+      filter: blur(50px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .ambient-item.reverse .ambient-visual::before {
+      background: radial-gradient(circle, rgba(224, 75, 108, 0.28), transparent 70%);
+    }
+
+    .ambient-img-mask {
+      width: 100%;
+      max-width: 520px;
+      height: 330px;
+      position: relative;
+      z-index: 1;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ambient-img-mask:hover {
+      transform: translateY(-6px) scale(1.02);
+    }
+
+    .ambient-img-mask img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Ambient Text Column */
+    .ambient-narrative {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .ambient-big-num {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1;
+      font-family: 'JetBrains Mono', monospace;
+      color: rgba(255, 255, 255, 0.08);
+      letter-spacing: -0.04em;
+    }
+
+    .ambient-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #38bdf8;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .ambient-item.reverse .ambient-tag {
+      color: #e04b6c;
+    }
+
+    .ambient-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: #ffffff;
+    }
+
+    .ambient-desc {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.72);
+      line-height: 1.7;
+    }
+
+    /* Sleek Tech Stat Strip: No Boxes, Just Pure Metrics */
+    .ambient-metrics {
+      display: flex;
+      gap: 32px;
+      margin-top: 10px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      flex-wrap: wrap;
+    }
+
+    .metric-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .metric-stat {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .metric-label {
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* =========================================================
+       STYLE B: CIRCULAR HOLOGRAPHIC PORTAL (NO RECTANGLES)
+       Round visual lens with orbital halo & floating data
+       ========================================================= */
+    .portal-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 90px;
+    }
+
+    .portal-item {
+      display: flex;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .portal-item.reverse {
+      flex-direction: row-reverse;
+    }
+
+    .portal-lens-wrap {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .portal-orbit {
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 1px dashed rgba(224, 75, 108, 0.35);
+      animation: rotateOrbit 25s linear infinite;
+    }
+
+    @keyframes rotateOrbit {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .portal-lens {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 0 50px rgba(224, 75, 108, 0.3), 0 20px 50px rgba(0, 0, 0, 0.8);
+      border: 2px solid rgba(255, 230, 236, 0.25);
+    }
+
+    .portal-lens img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .portal-lens:hover img {
+      transform: scale(1.08);
+    }
+
+    .portal-info {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .portal-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .portal-pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .portal-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* =========================================================
+       STYLE C: TECHNICAL LASER RAIL (TIMELINE / ROADMAP)
+       Continuous glowing vertical circuit rail with side nodes
+       ========================================================= */
+    .rail-showcase {
+      position: relative;
+      padding: 20px 0;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .rail-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 36px;
+      width: 2px;
+      background: linear-gradient(180deg, #e04b6c, #38bdf8, #e04b6c);
+      box-shadow: 0 0 12px rgba(224, 75, 108, 0.6);
+    }
+
+    .rail-node {
+      position: relative;
+      padding-left: 90px;
+      margin-bottom: 80px;
+    }
+
+    .rail-dot {
+      position: absolute;
+      left: 27px;
+      top: 12px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #0c0406;
+      border: 2px solid #e04b6c;
+      box-shadow: 0 0 14px #e04b6c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rail-dot::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ffffff;
+    }
+
+    .rail-node-content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .rail-node-content h3 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .rail-preview-thumb {
+      max-width: 480px;
+      height: 220px;
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 8px 0;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
+    }
+
+    .rail-preview-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .ambient-item, .ambient-item.reverse {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .portal-item, .portal-item.reverse {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .portal-lens-wrap {
+        width: 240px;
+        height: 240px;
+      }
+      .portal-lens {
+        width: 220px;
+        height: 220px;
+      }
+      .hero-heading {
+        font-size: 2.1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-wrapper">
+    <div class="hero-header">
+      <span class="accent-tag">// ZERO-BOX ARCHITECTURE</span>
+      <h1 class="hero-heading">3 Completely Box-Free Concepts</h1>
+      <p class="hero-sub">
+        No container cards, no box borders, no rectangular outlines. Content floats organically inside atmospheric light fields directly on the dark canvas.
+      </p>
+    </div>
+
+    <!-- ========================================================
+         CONCEPT A: CINEMATIC AMBIENT SPLIT (RECOMMENDED)
+         ======================================================== -->
+    <div class="style-separator">
+      <div class="sep-line"></div>
+      <span class="sep-title">Option A: Cinematic Ambient Split (Most Recommended)</span>
+      <div class="sep-line"></div>
+    </div>
+
+    <div class="ambient-showcase">
+      <!-- 01. Aqua Guard -->
+      <div class="ambient-item">
+        <div class="ambient-visual">
+          <div class="ambient-img-mask">
+            <img src="aquaguard.jpg" alt="Aqua Guard IoT Water Monitoring">
+          </div>
+        </div>
+
+        <div class="ambient-narrative">
+          <span class="ambient-big-num">01</span>
+          <span class="ambient-tag">ASU EPICS • IoT &amp; Aquaculture Intelligence</span>
+          <h2 class="ambient-title">Aqua Guard Smart Water Monitoring</h2>
+          <p class="ambient-desc">
+            Automating 24/7 pond telemetry for commercial aquaculture. Continuous physical sensors stream pH, temperature, and turbidity directly into cloud dashboards, paired with machine learning to forecast pond risk 7 days ahead.
+          </p>
+
+          <div class="ambient-metrics">
+            <div class="metric-col">
+              <span class="metric-stat">24/7</span>
+              <span class="metric-label">Live Telemetry</span>
+            </div>
+            <div class="metric-col">
+              <span class="metric-stat">7 Days</span>
+              <span class="metric-label">ML Forecast</span>
+            </div>
+            <div class="metric-col">
+              <span class="metric-stat">ESP32</span>
+              <span class="metric-label">Edge Controller</span>
+            </div>
+          </div>
+
+          <a href="https://lnkd.in/p/dB7Nr46g" target="_blank" rel="noopener" class="text-link">
+            <span>Explore Aqua Guard Case Study</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- 02. Myosync -->
+      <div class="ambient-item reverse">
+        <div class="ambient-visual">
+          <div class="ambient-img-mask">
+            <img src="myosync.jpg" alt="Myosync Prosthetic Arm Control">
+          </div>
+        </div>
+
+        <div class="ambient-narrative">
+          <span class="ambient-big-num">02</span>
+          <span class="ambient-tag">ATL Patent Project • Biomedical AI &amp; Robotics</span>
+          <h2 class="ambient-title">Myosync Bionic Prosthetic Control</h2>
+          <p class="ambient-desc">
+            Non-invasive neuro-prosthetic articulation engineered for specially-abled individuals. Real-time surface muscle potential acquisition decoded through Raspberry Pi edge machine learning to drive multi-finger robotic actuation.
+          </p>
+
+          <div class="ambient-metrics">
+            <div class="metric-col">
+              <span class="metric-stat">EMG DSP</span>
+              <span class="metric-label">Signal Pipeline</span>
+            </div>
+            <div class="metric-col">
+              <span class="metric-stat">5-Finger</span>
+              <span class="metric-label">Motor Articulation</span>
+            </div>
+            <div class="metric-col">
+              <span class="metric-stat">PATENT</span>
+              <span class="metric-label">ATL Healthcare</span>
+            </div>
+          </div>
+
+          <a href="https://www.linkedin.com/posts/sahithi-kontam_nationaldisabilityday-atlproject-prostheticarm-activity-7269686868307243008-8qIE?utm_source=share&utm_medium=member_desktop&rcm=ACoAAGLkZoEBPJWYef_jU-qsglVw3W7ZsZkJIsw" target="_blank" rel="noopener" class="text-link">
+            <span>View Patent &amp; Clinical Story</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ========================================================
+         CONCEPT B: CIRCULAR HOLOGRAPHIC PORTALS
+         ======================================================== -->
+    <div class="style-separator">
+      <div class="sep-line"></div>
+      <span class="sep-title">Option B: Circular Holographic Portals (Round Lenses)</span>
+      <div class="sep-line"></div>
+    </div>
+
+    <div class="portal-showcase">
+      <!-- 01. Aqua Guard Portal -->
+      <div class="portal-item">
+        <div class="portal-lens-wrap">
+          <div class="portal-orbit"></div>
+          <div class="portal-lens">
+            <img src="aquaguard.jpg" alt="Aqua Guard">
+          </div>
+        </div>
+        <div class="portal-info">
+          <span class="ambient-tag">ASU EPICS // IOT AQUACULTURE</span>
+          <h2 class="portal-title">Aqua Guard Smart Water Monitoring</h2>
+          <p class="ambient-desc">
+            Continuous physical water telemetry replacing manual sampling. Live web telemetry alerts farmers instantly to dangerous parameter fluctuations, safeguarding high-investment aquaculture crops.
+          </p>
+          <div class="portal-pill-list">
+            <span class="portal-chip">Continuous Sampling</span>
+            <span class="portal-chip">7-Day Predictive ML</span>
+            <span class="portal-chip">Firebase Telemetry</span>
+            <span class="portal-chip">ESP32</span>
+          </div>
+          <a href="https://lnkd.in/p/dB7Nr46g" target="_blank" rel="noopener" class="text-link">
+            <span>Read Case Study</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- 02. Myosync Portal -->
+      <div class="portal-item reverse">
+        <div class="portal-lens-wrap">
+          <div class="portal-orbit" style="border-color: rgba(56, 189, 248, 0.4); animation-direction: reverse;"></div>
+          <div class="portal-lens" style="box-shadow: 0 0 50px rgba(56, 189, 248, 0.25);">
+            <img src="myosync.jpg" alt="Myosync">
+          </div>
+        </div>
+        <div class="portal-info">
+          <span class="ambient-tag" style="color: #38bdf8;">ATL PATENT // BIOMEDICAL AI</span>
+          <h2 class="portal-title">Myosync Bionic Arm Control</h2>
+          <p class="ambient-desc">
+            Surface EMG bio-potential sensors capture real-time muscle impulses from amputees, decoded through embedded Raspberry Pi algorithms to coordinate natural multi-finger prosthetic articulation.
+          </p>
+          <div class="portal-pill-list">
+            <span class="portal-chip">EMG Bio-Potentials</span>
+            <span class="portal-chip">Raspberry Pi Edge</span>
+            <span class="portal-chip">Micro-Actuation</span>
+            <span class="portal-chip">ATL Patent</span>
+          </div>
+          <a href="https://www.linkedin.com/posts/sahithi-kontam_nationaldisabilityday-atlproject-prostheticarm-activity-7269686868307243008-8qIE?utm_source=share&utm_medium=member_desktop&rcm=ACoAAGLkZoEBPJWYef_jU-qsglVw3W7ZsZkJIsw" target="_blank" rel="noopener" class="text-link">
+            <span>Read Patent Story</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ========================================================
+         CONCEPT C: TECHNICAL LASER RAIL (TIMELINE STREAM)
+         ======================================================== -->
+    <div class="style-separator">
+      <div class="sep-line"></div>
+      <span class="sep-title">Option C: Technical Laser Rail (Interactive Stream)</span>
+      <div class="sep-line"></div>
+    </div>
+
+    <div class="rail-showcase">
+      <div class="rail-line"></div>
+
+      <!-- Node 1 -->
+      <div class="rail-node">
+        <div class="rail-dot"></div>
+        <div class="rail-node-content">
+          <span class="ambient-tag">2025 – 2026 // ASU EPICS FLAGSHIP</span>
+          <h3>Aqua Guard Smart Water Monitoring</h3>
+          <p class="ambient-desc">
+            Autonomous multi-sensor buoy monitoring aquaculture ponds 24/7 with predictive AI analytics.
+          </p>
+          <div class="rail-preview-thumb">
+            <img src="aquaguard.jpg" alt="Aqua Guard">
+          </div>
+          <a href="https://lnkd.in/p/dB7Nr46g" target="_blank" rel="noopener" class="text-link">
+            <span>View Project Telemetry →</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Node 2 -->
+      <div class="rail-node">
+        <div class="rail-dot" style="border-color: #38bdf8; box-shadow: 0 0 14px #38bdf8;"></div>
+        <div class="rail-node-content">
+          <span class="ambient-tag" style="color: #38bdf8;">2024 – 2025 // ATL HEALTHCARE PATENT</span>
+          <h3>Myosync EMG Prosthetic Arm Control</h3>
+          <p class="ambient-desc">
+            Assistive neuro-rehabilitation system converting neuromuscular electrical impulses into dexterous bionic finger actuation.
+          </p>
+          <div class="rail-preview-thumb">
+            <img src="myosync.jpg" alt="Myosync">
+          </div>
+          <a href="https://www.linkedin.com/posts/sahithi-kontam_nationaldisabilityday-atlproject-prostheticarm-activity-7269686868307243008-8qIE?utm_source=share&utm_medium=member_desktop&rcm=ACoAAGLkZoEBPJWYef_jU-qsglVw3W7ZsZkJIsw" target="_blank" rel="noopener" class="text-link">
+            <span>View Patent Credentials →</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,411 @@
+/* =========================================================
+   CREATIVE CARD ANIMATIONS - NO BOXES
+   Modern, cute, animated card styles
+   ========================================================= */
+
+/* =========================================================
+   EDUCATION CARDS - Circular Progress Style
+   ========================================================= */
+.education-card-wrapper {
+  animation: educationCardFloat 6s ease-in-out infinite !important;
+}
+
+.education-card-modern {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  position: relative;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.education-card-modern:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 12px 40px rgba(255, 255, 255, 0.15),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  transform: translateY(-6px) scale(1.02);
+}
+
+.education-card-visual {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  position: relative;
+}
+
+.education-icon {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.education-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+  animation: rotateIcon 20s linear infinite;
+}
+
+.education-svg .circle-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+}
+
+.education-svg .cap-path {
+  fill: rgba(255, 255, 255, 0.6);
+  transition: fill 0.3s ease;
+}
+
+.education-card-modern:hover .education-svg .cap-path {
+  fill: rgba(255, 255, 255, 1);
+}
+
+.education-glow {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: radial-gradient(circle, rgba(255,255,255,0.2), transparent);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.education-card-modern:hover .education-glow {
+  opacity: 1;
+}
+
+.education-card-content {
+  flex: 1;
+}
+
+@keyframes educationCardFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes rotateIcon {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+/* =========================================================
+   CERTIFICATION BADGES - Tag/Badge Style
+   ========================================================= */
+.cert-badge-modern {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: badgeSlideIn 0.5s ease-out;
+}
+
+.cert-badge-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.cert-badge-modern:hover {
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
+}
+
+.cert-badge-modern:hover::before {
+  left: 100%;
+}
+
+.cert-badge-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.cert-badge-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.cert-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  font-size: 0.8rem;
+  animation: checkPulse 2s ease-in-out infinite;
+}
+
+.cert-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@keyframes badgeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes checkPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* =========================================================
+   EXPERIENCE TIMELINE - Timeline Dot & Line Style
+   ========================================================= */
+.timeline-visual {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 100%;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -7px;
+  top: 14px;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+.timeline-item:hover .timeline-dot {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.5),
+    inset 0 0 8px rgba(255, 255, 255, 0.2);
+  transform: scale(1.3);
+}
+
+.timeline-line {
+  position: absolute;
+  left: 8px;
+  top: 35px;
+  width: 2px;
+  height: calc(100% - 35px);
+  background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.1));
+  animation: lineGrow 1s ease-out;
+}
+
+.timeline-item:last-child .timeline-line {
+  display: none;
+}
+
+@keyframes dotPulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+  }
+  50% { 
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  }
+}
+
+@keyframes lineGrow {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: calc(100% - 35px);
+    opacity: 1;
+  }
+}
+
+/* =========================================================
+   SKILLS PILLS - Modern Tag Cloud Style
+   ========================================================= */
+.skill-pill-wrapper {
+  display: inline-block;
+}
+
+.skill-pill-modern {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: skillPopIn 0.5s ease-out;
+}
+
+.skill-pill-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  opacity: 0;
+  animation: topLineFlash 1.5s ease-in-out infinite;
+}
+
+.skill-pill-modern:hover {
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+.skill-label {
+  position: relative;
+  z-index: 1;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 0.3s ease;
+}
+
+.skill-pill-modern:hover .skill-label {
+  color: #ffffff;
+}
+
+.skill-underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.6), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.skill-pill-modern:hover .skill-underline {
+  transform: scaleX(1);
+}
+
+@keyframes skillPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes topLineFlash {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================= */
+@media (max-width: 768px) {
+  .education-card-modern {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .education-card-visual {
+    width: 60px;
+    height: 60px;
+  }
+
+  .cert-badge-modern {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  .timeline-visual {
+    width: 16px;
+  }
+
+  .timeline-dot {
+    width: 16px;
+    height: 16px;
+    left: -6px;
+  }
+
+  .skill-pill-modern {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+  }
+}
+
+/* =========================================================
+   ANIMATION ENHANCEMENTS
+   ========================================================= */
+.visible {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

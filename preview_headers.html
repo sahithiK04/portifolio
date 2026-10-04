@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Header Navigation Styles Preview — Sai Sahithi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #110508;
+      background-image: 
+        radial-gradient(circle at 80% 20%, rgba(224, 75, 108, 0.15), transparent 40%),
+        radial-gradient(circle at 20% 70%, rgba(200, 59, 88, 0.12), transparent 45%);
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 40px 24px 80px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 40%, #ffb3c6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-subtitle {
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 0.95rem;
+      margin-bottom: 48px;
+    }
+
+    .preview-card {
+      background: rgba(26, 11, 18, 0.65);
+      border: 1px solid rgba(255, 230, 236, 0.12);
+      border-radius: 18px;
+      padding: 32px 28px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      transition: border-color 0.3s ease;
+    }
+
+    .preview-card:hover {
+      border-color: rgba(224, 75, 108, 0.35);
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .option-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(224, 75, 108, 0.2);
+      border: 1px solid rgba(224, 75, 108, 0.4);
+      color: #ffb3c6;
+    }
+
+    .option-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-top: 6px;
+    }
+
+    .option-desc {
+      font-size: 0.88rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 4px;
+    }
+
+    .stage {
+      background: #0d0406;
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 36px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: auto;
+      position: relative;
+    }
+
+    /* =========================================================
+       STYLE 1: DYNAMIC GLASS DOCK (Apple / Raycast Spotlight Pill)
+       ========================================================= */
+    .dock-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px;
+      background: rgba(30, 14, 21, 0.75);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 230, 236, 0.24);
+      border-radius: 9999px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    }
+
+    .dock-link {
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: rgba(255, 255, 255, 0.75);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dock-link:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .dock-link.active {
+      color: #ffffff;
+      background: linear-gradient(135deg, rgba(224, 75, 108, 0.55), rgba(200, 59, 88, 0.35));
+      border: 1px solid rgba(224, 75, 108, 0.6);
+      box-shadow: 0 0 18px rgba(224, 75, 108, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    }
+
+    /* =========================================================
+       STYLE 2: CYBER-EDITORIAL HUD (Developer / Monospace)
+       ========================================================= */
+    .hud-bar {
+      display: flex;
+      align-items: center;
+      background: rgba(18, 7, 12, 0.85);
+      border: 1px solid rgba(224, 75, 108, 0.3);
+      padding: 8px 14px;
+      border-radius: 6px;
+      position: relative;
+      font-family: 'JetBrains Mono', monospace;
+      box-shadow: 0 0 24px rgba(224, 75, 108, 0.15);
+    }
+
+    .hud-bar::before {
+      content: '[';
+      position: absolute;
+      left: -8px;
+      color: #e04b6c;
+      font-weight: 700;
+    }
+
+    .hud-bar::after {
+      content: ']';
+      position: absolute;
+      right: -8px;
+      color: #e04b6c;
+      font-weight: 700;
+    }
+
+    .hud-link {
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      padding: 6px 12px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hud-link .num {
+      color: rgba(224, 75, 108, 0.7);
+      font-size: 0.68rem;
+    }
+
+    .hud-link:hover {
+      color: #ffffff;
+    }
+
+    .hud-link.active {
+      color: #ffffff;
+      background: rgba(224, 75, 108, 0.2);
+      border-radius: 4px;
+    }
+
+    .hud-link.active::before {
+      content: '>';
+      color: #e04b6c;
+      font-weight: 800;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* =========================================================
+       STYLE 3: DYNAMIC ISLAND + RECRUITER STATUS TAG
+       ========================================================= */
+    .island-bar {
+      display: flex;
+      align-items: center;
+      padding: 6px 8px;
+      background: rgba(24, 10, 16, 0.85);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 230, 236, 0.18);
+      border-radius: 9999px;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #6ee7b7;
+      letter-spacing: 0.03em;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 8px #34d399;
+      animation: pulseGreen 2s infinite;
+    }
+
+    @keyframes pulseGreen {
+      0%, 100% { box-shadow: 0 0 6px #34d399; }
+      50% { box-shadow: 0 0 14px #34d399; }
+    }
+
+    .island-divider {
+      width: 1px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .island-nav {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-right: 12px;
+    }
+
+    .island-link {
+      text-decoration: none;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.75);
+      transition: color 0.2s ease;
+      position: relative;
+    }
+
+    .island-link:hover, .island-link.active {
+      color: #ffffff;
+    }
+
+    .island-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      border-radius: 2px;
+      background: #e04b6c;
+      box-shadow: 0 0 8px #e04b6c;
+    }
+
+    /* =========================================================
+       STYLE 4: MINIMALIST NEON UNDERLINE SLIDER
+       ========================================================= */
+    .underline-nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      padding: 10px 24px;
+      background: rgba(18, 7, 12, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+    }
+
+    .underline-link {
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.65);
+      position: relative;
+      padding: 6px 0;
+      transition: color 0.2s ease;
+    }
+
+    .underline-link:hover {
+      color: #ffffff;
+    }
+
+    .underline-link.active {
+      color: #ffffff;
+    }
+
+    .underline-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #e04b6c, #ff758f);
+      border-radius: 2px;
+      box-shadow: 0 0 10px #e04b6c;
+    }
+
+    /* =========================================================
+       STYLE 5: SAKURA BLOSSOM FROSTED GLASS
+       ========================================================= */
+    .sakura-pill {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 22px;
+      background: rgba(36, 14, 23, 0.72);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 180, 198, 0.25);
+      border-radius: 9999px;
+      box-shadow: 0 8px 32px rgba(224, 75, 108, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+    }
+
+    .sakura-link {
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.75);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .sakura-link:hover, .sakura-link.active {
+      color: #ffffff;
+    }
+
+    .sakura-petal {
+      font-size: 0.85rem;
+      color: #ff758f;
+      filter: drop-shadow(0 0 6px #ff758f);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="page-title">Navigation Header Style Concepts</h1>
+    <p class="page-subtitle">Interactive prototypes rendered in real-time. Hover or click to test.</p>
+
+    <!-- OPTION 1 -->
+    <div class="preview-card">
+      <div class="card-meta">
+        <div>
+          <span class="option-badge">Option 1 • Recommended</span>
+          <h2 class="option-title">Dynamic Glass Dock (Apple / Raycast Spotlight Pill)</h2>
+          <p class="option-desc">Frosted translucent glass dock where the active tab glows inside a smooth capsule pill.</p>
+        </div>
+      </div>
+      <img src="header_glass_dock.jpg" alt="Option 1 Concept Render" style="width: 100%; max-height: 260px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255, 230, 236, 0.15);">
+      <div class="stage">
+        <nav class="dock-pill">
+          <a href="#about" class="dock-link active">ABOUT</a>
+          <a href="#experience" class="dock-link">EXPERIENCE</a>
+          <a href="#projects" class="dock-link">PROJECTS</a>
+          <a href="#products" class="dock-link">PRODUCTS</a>
+          <a href="#skills" class="dock-link">SKILLS</a>
+          <a href="#contact" class="dock-link">CONTACT</a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- OPTION 2 -->
+    <div class="preview-card">
+      <div class="card-meta">
+        <div>
+          <span class="option-badge">Option 2</span>
+          <h2 class="option-title">Cyber-Editorial Developer HUD (Linear / Monospace)</h2>
+          <p class="option-desc">High-tech engineer HUD with numbered items, bracket corners [ · ], and blinking terminal prompt >.</p>
+        </div>
+      </div>
+      <img src="header_cyber_hud.jpg" alt="Option 2 Concept Render" style="width: 100%; max-height: 260px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255, 230, 236, 0.15);">
+      <div class="stage">
+        <nav class="hud-bar">
+          <a href="#about" class="hud-link active"><span class="num">01</span>ABOUT</a>
+          <a href="#experience" class="hud-link"><span class="num">02</span>EXPERIENCE</a>
+          <a href="#projects" class="hud-link"><span class="num">03</span>PROJECTS</a>
+          <a href="#products" class="hud-link"><span class="num">04</span>PRODUCTS</a>
+          <a href="#skills" class="hud-link"><span class="num">05</span>SKILLS</a>
+          <a href="#contact" class="hud-link"><span class="num">06</span>CONTACT</a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- OPTION 3 -->
+    <div class="preview-card">
+      <div class="card-meta">
+        <div>
+          <span class="option-badge">Option 3</span>
+          <h2 class="option-title">Dynamic Island with Live Recruiter Status</h2>
+          <p class="option-desc">Pill island featuring a pulsing green 'Open to Roles' status badge right alongside nav links.</p>
+        </div>
+      </div>
+      <div class="stage">
+        <nav class="island-bar">
+          <div class="status-badge">
+            <span class="status-dot"></span>
+            OPEN TO ROLES
+          </div>
+          <div class="island-divider"></div>
+          <div class="island-nav">
+            <a href="#about" class="island-link active">About</a>
+            <a href="#experience" class="island-link">Experience</a>
+            <a href="#projects" class="island-link">Projects</a>
+            <a href="#products" class="island-link">Products</a>
+            <a href="#skills" class="island-link">Skills</a>
+            <a href="#contact" class="island-link">Contact</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <!-- OPTION 4 -->
+    <div class="preview-card">
+      <div class="card-meta">
+        <div>
+          <span class="option-badge">Option 4</span>
+          <h2 class="option-title">Minimalist Neon Underline Slider</h2>
+          <p class="option-desc">Airy, modern, zero-bulk nav with a vibrant glowing rose laser underline sliding beneath active item.</p>
+        </div>
+      </div>
+      <div class="stage">
+        <nav class="underline-nav">
+          <a href="#about" class="underline-link active">About</a>
+          <a href="#experience" class="underline-link">Experience</a>
+          <a href="#projects" class="underline-link">Projects</a>
+          <a href="#products" class="underline-link">Products</a>
+          <a href="#skills" class="underline-link">Skills</a>
+          <a href="#contact" class="underline-link">Contact</a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- OPTION 5 -->
+    <div class="preview-card">
+      <div class="card-meta">
+        <div>
+          <span class="option-badge">Option 5</span>
+          <h2 class="option-title">Sakura Blossom Frosted Glass</h2>
+          <p class="option-desc">Cohesive with the cherry blossom theme, featuring rose-gold shimmer borders and a blossom accent.</p>
+        </div>
+      </div>
+      <div class="stage">
+        <nav class="sakura-pill">
+          <a href="#about" class="sakura-link active"><span class="sakura-petal">🌸</span>ABOUT</a>
+          <a href="#experience" class="sakura-link">EXPERIENCE</a>
+          <a href="#projects" class="sakura-link">PROJECTS</a>
+          <a href="#products" class="sakura-link">PRODUCTS</a>
+          <a href="#skills" class="sakura-link">SKILLS</a>
+          <a href="#contact" class="sakura-link">CONTACT</a>
+        </nav>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Interactive tab switching on preview cards
+    document.querySelectorAll('.stage nav').forEach(nav => {
+      nav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          nav.querySelectorAll('a').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

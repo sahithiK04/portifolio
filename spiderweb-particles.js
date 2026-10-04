@@ -324,25 +324,25 @@
         const outerX = center.x + Math.cos(angle) * (maxR * webPulse);
         const outerY = center.y + Math.sin(angle) * (maxR * webPulse);
 
-        // Luminous celestial silver silk gradient: soft whisper so text reads perfectly
+        // Luminous celestial silver silk gradient: clearly recognizable spiderweb threads
         const grad = this.ctx.createLinearGradient(center.x, center.y, outerX, outerY);
-        grad.addColorStop(0, 'rgba(235, 242, 255, 0.16)');
-        grad.addColorStop(0.3, 'rgba(230, 240, 255, 0.12)');
-        grad.addColorStop(0.7, 'rgba(220, 235, 255, 0.08)');
-        grad.addColorStop(1, 'rgba(215, 230, 255, 0.04)');
+        grad.addColorStop(0, 'rgba(235, 245, 255, 0.35)');
+        grad.addColorStop(0.3, 'rgba(230, 242, 255, 0.26)');
+        grad.addColorStop(0.7, 'rgba(220, 235, 255, 0.18)');
+        grad.addColorStop(1, 'rgba(215, 230, 255, 0.10)');
 
         this.ctx.strokeStyle = grad;
-        this.ctx.lineWidth = 0.55; // Delicate hairline silk thread
+        this.ctx.lineWidth = 0.75; // Crisp hairline silk thread
         this.ctx.beginPath();
         this.ctx.moveTo(center.x, center.y);
         this.ctx.lineTo(outerX, outerY);
         this.ctx.stroke();
 
         // Tip node at the outer window sides
-        const tipGlow = Math.sin(this.time * 0.06 + i * 0.4) * 0.2 + 0.4;
-        this.ctx.fillStyle = `rgba(235, 245, 255, ${tipGlow * 0.5})`;
+        const tipGlow = Math.sin(this.time * 0.06 + i * 0.4) * 0.25 + 0.55;
+        this.ctx.fillStyle = `rgba(235, 245, 255, ${tipGlow * 0.75})`;
         this.ctx.beginPath();
-        this.ctx.arc(outerX, outerY, 1.2, 0, Math.PI * 2);
+        this.ctx.arc(outerX, outerY, 1.4, 0, Math.PI * 2);
         this.ctx.fill();
       }
 
@@ -355,11 +355,11 @@
         const ringRipple = Math.sin(this.time * 0.04 - ring * 0.22) * 0.012;
         const radius = maxR * Math.pow(rRatio, 1.2) * (webPulse + ringRipple);
 
-        // Soft, slightly visible silk thread alpha
-        const ringAlpha = Math.max(0.04, (1 - rRatio * 0.55) * 0.13);
+        // Clearly visible spiderweb silk arches
+        const ringAlpha = Math.max(0.10, (1 - rRatio * 0.52) * 0.28);
 
         this.ctx.strokeStyle = `rgba(225, 238, 255, ${ringAlpha})`;
-        this.ctx.lineWidth = 0.5; // Delicate hairline silk
+        this.ctx.lineWidth = 0.7; // Crisp hairline silk
         this.ctx.beginPath();
 
         for (let spoke = 0; spoke < this.numSpokes; spoke++) {
@@ -435,14 +435,14 @@
         const y = center.y + Math.sin(d.angle) * (d.radius * webPulse);
 
         const pulse = Math.sin(this.time * d.pulseSpeed + d.phase);
-        const glowAlpha = 0.12 + pulse * 0.16;
-        const radius = d.baseSize * (0.8 + pulse * 0.15);
+        const glowAlpha = 0.22 + pulse * 0.22;
+        const radius = d.baseSize * (0.85 + pulse * 0.16);
 
         // Soft halo
-        const haloRadius = radius * 2.2;
+        const haloRadius = radius * 2.4;
         const haloGrad = this.ctx.createRadialGradient(x, y, 0, x, y, haloRadius);
-        haloGrad.addColorStop(0, `rgba(235, 245, 255, ${glowAlpha * 0.35})`);
-        haloGrad.addColorStop(0.5, `rgba(220, 235, 255, ${glowAlpha * 0.08})`);
+        haloGrad.addColorStop(0, `rgba(235, 245, 255, ${glowAlpha * 0.45})`);
+        haloGrad.addColorStop(0.5, `rgba(220, 235, 255, ${glowAlpha * 0.12})`);
         haloGrad.addColorStop(1, 'rgba(220, 235, 255, 0)');
 
         this.ctx.fillStyle = haloGrad;
@@ -451,7 +451,7 @@
         this.ctx.fill();
 
         // Glistening crystal core
-        this.ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.45, glowAlpha + 0.15)})`;
+        this.ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.75, glowAlpha + 0.25)})`;
         this.ctx.beginPath();
         this.ctx.arc(x, y, Math.max(0.7, radius * 0.5), 0, Math.PI * 2);
         this.ctx.fill();
@@ -475,7 +475,7 @@
       for (let i = 0; i < this.particles.length; i++) {
         const p = this.particles[i];
         const twinkle = Math.sin(this.time * p.twinkleSpeed + p.twinkleOffset) * 0.25 + 0.75;
-        const alpha = Math.max(0, p.life * p.alpha * twinkle * 0.35);
+        const alpha = Math.max(0, p.life * p.alpha * twinkle * 0.65);
         if (alpha <= 0.01) continue;
 
         const size = p.size * (0.6 + 0.3 * p.life);

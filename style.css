@@ -2489,6 +2489,13 @@ body {
   opacity: 1;
   overflow: hidden;
   user-select: none;
+  transition: opacity 0.4s ease;
+}
+
+@media (max-width: 768px) {
+  .content-web-bg {
+    opacity: 0.2;
+  }
 }
 
 .content-web-canvas {

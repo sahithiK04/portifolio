@@ -235,14 +235,25 @@ body {
     transparent 68%);
 }
 
-.character-canvas {
+.hero-image-wrap {
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  display: block;
+  overflow: hidden;
   background-color: var(--bg-hero);
+  z-index: 1;
+}
+
+.hero-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 61.8% center; /* Golden ratio alignment on desktop */
+  display: block;
+  user-select: none;
+  -webkit-user-select: none;
   pointer-events: none;
 }
 
@@ -2924,6 +2935,10 @@ body {
       rgba(17, 5, 8, 0.65) 80%,
       rgba(24, 9, 15, 0.92) 100%
     );
+  }
+
+  .hero-bg-image {
+    object-position: 50% 22%;
   }
 
   .hero-content {

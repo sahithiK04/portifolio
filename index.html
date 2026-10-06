@@ -130,11 +130,13 @@
 
 
   <!-- =========================================================
-       HERO VIEWPORT (100VH INTERACTIVE 60FPS CURSOR TRACKING)
+       HERO VIEWPORT (FLORAL HERO PORTRAIT — ZERO LAG, BUTTERY SMOOTH)
        ========================================================= -->
   <section class="hero-container" id="hero">
-    <!-- Interactive 60fps Canvas (Cover Full Screen) -->
-    <canvas id="character-canvas" class="character-canvas"></canvas>
+    <!-- Floral Portrait Hero Background (Hardware Accelerated, Instant Load) -->
+    <div class="hero-image-wrap">
+      <img src="frames/center.webp" alt="Sai Sahithi Kontam Floral Portrait" class="hero-bg-image" fetchpriority="high" decoding="sync" />
+    </div>
 
     <!-- Hero Content (Bottom-Left) / First Page -->
     <div class="hero-content" aria-label="Hero Introduction">
@@ -165,11 +167,6 @@
        SCROLLABLE CONTENT WRAPPER
        ========================================================= -->
   <main class="content-wrapper" id="content-wrapper">
-
-    <!-- Content Atmosphere: Procedural Glowing Web & Emitting Particles (Page 2 to End) -->
-    <div class="content-web-bg" id="spiderweb-wrap" aria-hidden="true">
-      <canvas class="content-web-canvas" id="spiderweb-canvas"></canvas>
-    </div>
 
     <!-- 00: ABOUT SECTION (5-Line Impact Profile) -->
     <section class="page-section" id="about">
@@ -1384,8 +1381,6 @@
 
   <script src="main.js"></script>
   <script src="magic-cursor.js"></script>
-  <script src="winter-blossoms.js"></script>
-  <script src="spiderweb-particles.js"></script>
 
   <!-- Service Worker Registration for Instant Frame Caching & Zero Lag -->
   <script>

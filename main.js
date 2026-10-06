@@ -1,290 +1,59 @@
 /**
- * SAI SAHITHI KONTAM PORTFOLIO — 60 FPS ZERO-LAG CURSOR TRACKING HERO
- * & CLASSIC SCROLLABLE LUXURY SECTIONS
+ * SAI SAHITHI KONTAM PORTFOLIO — HIGH PERFORMANCE ZERO-LAG
+ * FLORAL PORTRAIT & SCROLLABLE LUXURY SECTIONS
  */
 
-// 1. CONFIGURATION & CONSTANTS
-const TOTAL_FRAMES = 64;
-const BG_HEX = '#c7bbb7'; // Measured exact video background tone
-const FACE_NORM_X = 0.525; // Normalized face center X in 1920x1080 video
-const FACE_NORM_Y = 0.380; // Normalized face center Y in 1920x1080 video
-const LERP_FACTOR = 0.26;  // Response factor ~35ms tracking response
-
-// 2. DOM ELEMENTS
-const canvas = document.getElementById('character-canvas');
-const ctx = canvas.getContext('2d', { alpha: false });
+// 1. DOM ELEMENTS
 const loadingScreen = document.getElementById('loading-screen');
 const loaderProgress = document.getElementById('loader-progress');
 const cursorDot = document.getElementById('cursor-dot');
 const cursorRing = document.getElementById('cursor-ring');
-const heroSection = document.getElementById('hero');
 
-// Navigation & Modals
-const navLinks = document.querySelectorAll('.nav-link');
-const btnResume = document.getElementById('btn-resume');
-const resumeModal = document.getElementById('panel-resume');
-const modalCloseBtns = document.querySelectorAll('[data-close]');
-const magneticTargets = document.querySelectorAll('.magnetic-target');
-const revealElements = document.querySelectorAll('.reveal-on-scroll');
+// 2. DISMISS LOADING SCREEN (Instant, silky smooth)
+function dismissLoader() {
+  if (loaderProgress) {
+    loaderProgress.style.width = '100%';
+  }
+  setTimeout(() => {
+    if (loadingScreen) {
+      loadingScreen.classList.add('hidden');
+    }
+  }, 100);
+}
 
-// 3. STATE
-let images = [];
-let centerImage = null;
-let loadedCount = 0;
-let isReady = false;
-let isHeroVisible = true;
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', dismissLoader);
+} else {
+  dismissLoader();
+}
 
+// 3. SMOOTH CUSTOM CURSOR
 let mouseX = window.innerWidth * 0.5;
-let mouseY = window.innerHeight * 0.433;
+let mouseY = window.innerHeight * 0.5;
 let targetMouseX = mouseX;
 let targetMouseY = mouseY;
 let ringX = mouseX;
 let ringY = mouseY;
-let isMouseActive = false;
 
-let currentAngle = 0;
-let inDeadzone = true;
-let isModalOpen = false;
-
-// 4. PROGRESSIVE ASSET LOADING (Instant entry + smooth background hydration)
-function preloadAssets() {
-  const isMobile = window.innerWidth <= 768 || ('ontouchstart' in window);
-  let dismissed = false;
-
-  function dismissLoader() {
-    if (dismissed) return;
-    dismissed = true;
-    isReady = true;
-    if (loaderProgress) {
-      loaderProgress.style.width = '100%';
-    }
-    setTimeout(() => {
-      if (loadingScreen) {
-        loadingScreen.classList.add('hidden');
-      }
-    }, 200);
-  }
-
-  // Safety fallback: Never keep visitor waiting longer than 1.2s regardless of network speed
-  setTimeout(dismissLoader, 1200);
-
-  function updateProgress() {
-    loadedCount++;
-    const pct = Math.min(100, Math.round((loadedCount / (TOTAL_FRAMES + 1)) * 100));
-    if (loaderProgress && !dismissed) {
-      loaderProgress.style.width = `${pct}%`;
-    }
-
-    // Dismiss early once center frame + minimum initial frames are ready (or instantly on mobile)
-    if (!dismissed) {
-      if (isMobile && centerImage && centerImage.complete) {
-        dismissLoader();
-      } else if (loadedCount >= 8 && centerImage && centerImage.complete) {
-        dismissLoader();
-      }
-    }
-  }
-
-  // 1. High priority: Load neutral center hero frame
-  centerImage = new Image();
-  centerImage.src = 'frames/center.webp';
-  centerImage.onload = () => {
-    updateProgress();
-    if (isMobile) dismissLoader();
-  };
-  centerImage.onerror = () => {
-    centerImage.src = 'public/frames/center.webp';
-    centerImage.onload = () => {
-      updateProgress();
-      if (isMobile) dismissLoader();
-    };
-    centerImage.onerror = () => {
-      updateProgress();
-      dismissLoader();
-    };
-  };
-
-  // 2. Load 64 circular tracking frames in background
-  for (let i = 0; i < TOTAL_FRAMES; i++) {
-    const img = new Image();
-    img.src = `frames/frame_${i}.webp`;
-    img.onload = updateProgress;
-    img.onerror = () => {
-      img.src = `public/frames/frame_${i}.webp`;
-      img.onload = updateProgress;
-      img.onerror = updateProgress;
-    };
-    images.push(img);
-  }
-}
-
-// 5. CANVAS SIZING & RENDER LOOP
-let canvasW = window.innerWidth;
-let canvasH = window.innerHeight;
-let renderW = 0;
-let renderH = 0;
-let offsetX = 0;
-let offsetY = 0;
-let faceCenterX = 0;
-let faceCenterY = 0;
-let deadzoneRadius = 0;
-
-function resize() {
-  canvasW = window.innerWidth;
-  canvasH = window.innerHeight;
-
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  canvas.width = canvasW * dpr;
-  canvas.height = canvasH * dpr;
-  canvas.style.width = `${canvasW}px`;
-  canvas.style.height = `${canvasH}px`;
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.scale(dpr, dpr);
-
-  // Responsive canvas geometry
-  const videoAspect = 1920 / 1080;
-  const screenAspect = canvasW / canvasH;
-
-  // On mobile portrait screens (width <= 768px), avoid 380% zoom into the face.
-  // Gracefully scale and position the character in the upper section so head & shoulders fit naturally.
-  const isMobilePortrait = canvasW <= 768 && canvasH >= canvasW;
-
-  if (isMobilePortrait) {
-    // Full-bleed cover for mobile portrait: fills 100% height and width seamlessly
-    renderH = canvasH;
-    renderW = canvasH * videoAspect;
-
-    // Center character face horizontally in the mobile viewport
-    offsetX = (canvasW * 0.5) - (renderW * FACE_NORM_X);
-    offsetY = 0;
-
-    faceCenterX = canvasW * 0.5;
-    faceCenterY = renderH * FACE_NORM_Y;
-    deadzoneRadius = Math.min(canvasW, canvasH) * 0.15;
-  } else {
-    // Desktop & Landscape: Golden Ratio Subject Placement (Subject on the 61.8% golden section)
-    const baseScale = Math.max(canvasW / 1920, canvasH / 1080);
-    renderW = Math.max(1920 * baseScale, canvasW * 1.15);
-    renderH = renderW / videoAspect;
-    if (renderH < canvasH) {
-      renderH = canvasH;
-      renderW = renderH * videoAspect;
-    }
-
-    // Align face with the golden ratio vertical line (~61.8% from left)
-    const targetFaceX = canvasW * 0.618;
-    let computedOffsetX = targetFaceX - (renderW * FACE_NORM_X);
-
-    // Keep frame anchored without leaving empty background
-    offsetX = Math.min(0, Math.max(canvasW - renderW, computedOffsetX));
-    offsetY = Math.min(0, (canvasH - renderH) / 2);
-
-    faceCenterX = offsetX + renderW * FACE_NORM_X;
-    faceCenterY = offsetY + renderH * FACE_NORM_Y;
-    deadzoneRadius = Math.min(canvasW, canvasH) * 0.12;
-  }
-}
-
-window.addEventListener('resize', resize);
-resize();
-
-// Shortest-path angular circular interpolation
-function lerpAngle(current, target, factor) {
-  let diff = (target - current) % (2 * Math.PI);
-  if (diff < -Math.PI) diff += 2 * Math.PI;
-  if (diff > Math.PI) diff -= 2 * Math.PI;
-  return current + diff * factor;
-}
-
-// 6. MAIN RENDER LOOP (60 FPS, ZERO-GHOSTING)
-function render() {
-  // Smooth mouse interpolation
-  mouseX += (targetMouseX - mouseX) * 0.5;
-  mouseY += (targetMouseY - mouseY) * 0.5;
-
-  // Smooth custom cursor trailing ring
-  ringX += (targetMouseX - ringX) * 0.22;
-  ringY += (targetMouseY - ringY) * 0.22;
-
-  cursorDot.style.left = `${targetMouseX}px`;
-  cursorDot.style.top = `${targetMouseY}px`;
-  cursorRing.style.left = `${ringX}px`;
-  cursorRing.style.top = `${ringY}px`;
-
-  if (isReady && isHeroVisible) {
-    const dx = mouseX - faceCenterX;
-    const dy = mouseY - faceCenterY;
-    const dist = Math.hypot(dx, dy);
-
-    // Center eye contact condition
-    if (!isMouseActive || dist < deadzoneRadius || isModalOpen || window.scrollY > 150) {
-      inDeadzone = true;
-    } else {
-      inDeadzone = false;
-      const targetAngle = Math.atan2(dy, dx);
-      currentAngle = lerpAngle(currentAngle, targetAngle, LERP_FACTOR);
-    }
-
-    // Determine exact frame index (0..63)
-    let frameToDraw = centerImage;
-
-    if (!inDeadzone) {
-      let norm = currentAngle % (2 * Math.PI);
-      if (norm < 0) norm += 2 * Math.PI;
-      const frameIdx = Math.round((norm / (2 * Math.PI)) * TOTAL_FRAMES) % TOTAL_FRAMES;
-      const candidate = images[frameIdx];
-      frameToDraw = (candidate && candidate.complete && candidate.naturalWidth > 0) ? candidate : centerImage;
-    }
-
-    // Crisp 100% opacity frame draw (no alpha ghosting)
-    if (frameToDraw && frameToDraw.complete && frameToDraw.naturalWidth > 0) {
-      ctx.fillStyle = BG_HEX;
-      ctx.fillRect(0, 0, canvasW, canvasH);
-      ctx.drawImage(frameToDraw, offsetX, offsetY, renderW, renderH);
-    }
-  }
-
-  requestAnimationFrame(render);
-}
-
-// 7. MOUSE & TOUCH EVENT LISTENERS
 window.addEventListener('mousemove', (e) => {
-  isMouseActive = true;
   targetMouseX = e.clientX;
   targetMouseY = e.clientY;
-});
-
-window.addEventListener('mouseleave', () => {
-  isMouseActive = false;
-  targetMouseX = faceCenterX;
-  targetMouseY = faceCenterY;
-});
-
-// Touch support
-window.addEventListener('touchmove', (e) => {
-  if (e.touches.length > 0) {
-    isMouseActive = true;
-    targetMouseX = e.touches[0].clientX;
-    targetMouseY = e.touches[0].clientY;
+  if (cursorDot) {
+    cursorDot.style.left = `${targetMouseX}px`;
+    cursorDot.style.top = `${targetMouseY}px`;
   }
 }, { passive: true });
 
-window.addEventListener('touchend', () => {
-  isMouseActive = false;
-  targetMouseX = faceCenterX;
-  targetMouseY = faceCenterY;
-});
-
-// Pause hero canvas rendering when scrolled past hero
-const heroObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    isHeroVisible = entry.isIntersecting;
-  });
-}, { threshold: 0.05 });
-
-if (heroSection) {
-  heroObserver.observe(heroSection);
+function updateCursorRing() {
+  if (cursorRing) {
+    ringX += (targetMouseX - ringX) * 0.22;
+    ringY += (targetMouseY - ringY) * 0.22;
+    cursorRing.style.left = `${ringX}px`;
+    cursorRing.style.top = `${ringY}px`;
+  }
+  requestAnimationFrame(updateCursorRing);
 }
+requestAnimationFrame(updateCursorRing);
 
 // 8. MAGNETIC BUTTON & CURSOR HOVER EFFECTS
 function attachMagneticEffects() {

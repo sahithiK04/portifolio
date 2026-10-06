@@ -244,6 +244,8 @@ body {
   overflow: hidden;
   background-color: var(--bg-hero);
   z-index: 1;
+  pointer-events: none;
+  transform: none !important;
 }
 
 .hero-bg-image {
@@ -255,6 +257,9 @@ body {
   user-select: none;
   -webkit-user-select: none;
   pointer-events: none;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
 }
 
 .hero-content {

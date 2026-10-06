@@ -35,10 +35,10 @@
   <!-- Devicon icons for technical skills -->
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20261006">
 
   <!-- Preload Center Video Frame for Instant Hero Display -->
-  <link rel="preload" as="image" href="frames/center.webp" type="image/webp">
+  <link rel="preload" as="image" href="frames/center.webp?v=20261006" type="image/webp">
 </head>
 
 <body>
@@ -1379,14 +1379,22 @@
     </div>
   </div>
 
-  <script src="main.js"></script>
-  <script src="magic-cursor.js"></script>
+  <script src="main.js?v=20261006"></script>
 
-  <!-- Service Worker Registration for Instant Frame Caching & Zero Lag -->
+  <!-- Clear Stale Service Worker & Caches to ensure 100% static, lag-free experience -->
   <script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(() => {});
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const reg of registrations) {
+          reg.unregister();
+        }
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then((keys) => {
+        for (const key of keys) {
+          caches.delete(key);
+        }
       });
     }
   </script>

@@ -221,6 +221,20 @@ body {
   background-color: var(--bg-hero);
 }
 
+/* Subtle Golden Ratio Left Scrim for Instant Legibility */
+.hero-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  background: linear-gradient(90deg,
+    rgba(14, 5, 10, 0.88) 0%,
+    rgba(14, 5, 10, 0.62) 32%,
+    rgba(14, 5, 10, 0.18) 50%,
+    transparent 68%);
+}
+
 .character-canvas {
   position: absolute;
   top: 0;
@@ -234,10 +248,10 @@ body {
 
 .hero-content {
   position: absolute;
-  bottom: 8vh;
-  left: 6vw;
+  bottom: clamp(36px, 8vh, 80px);
+  left: clamp(24px, 6.18vw, 84px);
   z-index: 50;
-  max-width: 480px;
+  max-width: clamp(380px, 38.2vw, 540px);
   display: flex;
   flex-direction: column;
   pointer-events: auto;
@@ -259,13 +273,22 @@ body {
 
 .hero-tagline {
   font-family: var(--font-sans);
-  font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+  font-size: clamp(1.22rem, 2.2vw, 1.6rem);
   font-weight: 700;
-  color: #7c1933; /* Tagline in name's dark pink color */
+  color: #ffffff;
   line-height: 1.35;
   margin-bottom: 8px;
   letter-spacing: -0.01em;
-  text-shadow: none;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+.hero-tagline .tagline-highlight {
+  color: #ff758f;
+  background: linear-gradient(135deg, #ff8da1 0%, #e04b6c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  filter: drop-shadow(0 2px 8px rgba(224, 75, 108, 0.45));
 }
 
 .typing-cursor {
@@ -493,18 +516,103 @@ body {
 }
 
 /* =========================================================
-   AUTHENTIC CONNECTED VERTICAL TIMELINE (NO-BOX FORMAT)
+   00: ABOUT SECTION (5-Line Impact Profile)
+   ========================================================= */
+.about-card {
+  background: linear-gradient(135deg, rgba(38, 14, 26, 0.78) 0%, rgba(20, 8, 15, 0.88) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(224, 75, 108, 0.25);
+  border-left: 3px solid #e04b6c;
+  border-radius: 20px;
+  padding: clamp(24px, 4vw, 42px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), 0 0 24px rgba(224, 75, 108, 0.12);
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.about-description {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.about-line-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.about-line-num {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #ff758f;
+  background: rgba(224, 75, 108, 0.16);
+  border: 1px solid rgba(224, 75, 108, 0.35);
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.about-line-text {
+  color: rgba(255, 255, 255, 0.94);
+  font-size: clamp(0.96rem, 1.25vw, 1.05rem);
+  line-height: 1.62;
+  font-weight: 400;
+  margin: 0;
+}
+
+.about-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.about-stat-item {
+  background: rgba(25, 10, 18, 0.65);
+  border: 1px solid rgba(224, 75, 108, 0.18);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.about-stat-number {
+  font-size: 1.85rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 0%, #ff8da1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.about-stat-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255, 220, 230, 0.75);
+  letter-spacing: 0.02em;
+}
+
+/* =========================================================
+   01: AUTHENTIC CONNECTED TIMELINE WITH LUMINOUS SPIDER
    ========================================================= */
 .timeline-container {
   position: relative;
   padding-left: 38px;
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: 28px;
   margin-top: 28px;
 }
 
-/* Luminous Vertical Spine Rail */
+/* Luminous Silk Vertical Spine Rail */
 .timeline-container::before {
   content: '';
   position: absolute;
@@ -515,19 +623,19 @@ body {
   background: linear-gradient(180deg,
       #e04b6c 0%,
       #c83b58 35%,
-      rgba(200, 59, 88, 0.35) 75%,
-      rgba(200, 59, 88, 0.08) 100%);
+      rgba(200, 59, 88, 0.4) 75%,
+      rgba(200, 59, 88, 0.1) 100%);
+  box-shadow: 0 0 8px rgba(224, 75, 108, 0.45);
   border-radius: 2px;
 }
 
-/* =========================================================
-   CUTE KAWAII WHITE CAT SCROLL COMPANION ON TIMELINE
-   ========================================================= */
+/* Glowing Bioluminescent Spider Companion */
+.timeline-spider-tracker,
 .timeline-cat-tracker {
   position: absolute;
-  left: -17px;
+  left: -18px;
   top: 0;
-  width: 50px;
+  width: 52px;
   height: 52px;
   z-index: 25;
   pointer-events: auto;
@@ -539,210 +647,128 @@ body {
   will-change: transform;
 }
 
-.timeline-cat-body {
+.timeline-spider-body {
   position: relative;
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.25s ease;
 }
 
-.kitty-svg {
+.spider-svg {
   display: block;
   width: 100%;
   height: 100%;
   overflow: visible;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 10px rgba(224, 75, 108, 0.45));
-  transform-origin: center bottom;
-  animation: kittyBreathe 3.6s ease-in-out infinite;
+  transform-origin: center center;
+  animation: spiderBreathe 3.6s ease-in-out infinite;
 }
 
-@keyframes kittyBreathe {
-
-  0%,
-  100% {
+@keyframes spiderBreathe {
+  0%, 100% {
     transform: scale(1);
   }
-
   50% {
-    transform: scale(1.02, 0.98);
+    transform: scale(1.03);
   }
 }
 
-/* Natural Anime Eye Blink */
-.kitty-eyes {
-  transform-origin: 40px 32px;
-  animation: kittyBlink 4s ease-in-out infinite;
+/* Spider Silk Thread Shimmer */
+.spider-silk-line {
+  stroke-dashoffset: 0;
+  animation: spiderSilkShimmer 2.5s linear infinite;
 }
 
-@keyframes kittyBlink {
-
-  0%,
-  93%,
-  100% {
-    transform: scaleY(1);
-  }
-
-  96% {
-    transform: scaleY(0.08);
-  }
+@keyframes spiderSilkShimmer {
+  0% { stroke-dashoffset: 0; opacity: 0.6; }
+  50% { opacity: 0.95; }
+  100% { stroke-dashoffset: -12; opacity: 0.6; }
 }
 
-/* Playful Ear Twitch */
-.kitty-ear-left {
-  transform-origin: 21px 24px;
-  animation: kittyEarTwitch 5s ease-in-out infinite;
+/* Spider Eyes Twinkle */
+.spider-eyes {
+  animation: spiderEyesTwinkle 3s ease-in-out infinite;
 }
 
-@keyframes kittyEarTwitch {
-
-  0%,
-  88%,
-  100% {
-    transform: rotate(0deg);
-  }
-
-  92% {
-    transform: rotate(-8deg);
-  }
-
-  96% {
-    transform: rotate(4deg);
-  }
+@keyframes spiderEyesTwinkle {
+  0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 2px #ff8da1); }
+  50% { opacity: 1; filter: drop-shadow(0 0 4px #ffffff); }
 }
 
-/* Fluffy Tail Sway */
-.kitty-tail {
-  transform-origin: 26px 60px;
-  animation: kittyTailSway 2.6s ease-in-out infinite alternate;
+/* Spider Leg Motion when Scrolling */
+.timeline-spider-tracker.is-scrolling .leg-l1,
+.timeline-spider-tracker.is-scrolling .leg-l3 {
+  animation: spiderLegStepA 0.18s ease-in-out infinite alternate;
 }
 
-@keyframes kittyTailSway {
-  0% {
-    transform: rotate(-10deg);
-  }
-
-  100% {
-    transform: rotate(14deg);
-  }
+.timeline-spider-tracker.is-scrolling .leg-l2,
+.timeline-spider-tracker.is-scrolling .leg-l4 {
+  animation: spiderLegStepB 0.18s ease-in-out infinite alternate;
 }
 
-/* Twinkle Sparkle near Ear */
-.kitty-sparkle {
-  transform-origin: 60px 16px;
-  animation: kittySparkle 2.2s ease-in-out infinite;
+.timeline-spider-tracker.is-scrolling .leg-r1,
+.timeline-spider-tracker.is-scrolling .leg-r3 {
+  animation: spiderLegStepB 0.18s ease-in-out infinite alternate;
 }
 
-@keyframes kittySparkle {
-
-  0%,
-  100% {
-    transform: scale(0.7) rotate(0deg);
-    opacity: 0.6;
-  }
-
-  50% {
-    transform: scale(1.2) rotate(45deg);
-    opacity: 1;
-  }
+.timeline-spider-tracker.is-scrolling .leg-r2,
+.timeline-spider-tracker.is-scrolling .leg-r4 {
+  animation: spiderLegStepA 0.18s ease-in-out infinite alternate;
 }
 
-/* Active Motion while Scrolling */
-.timeline-cat-tracker.is-scrolling .kitty-svg {
-  animation: kittyRun 0.22s ease-in-out infinite alternate;
+@keyframes spiderLegStepA {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-5deg); }
 }
 
-@keyframes kittyRun {
-  0% {
-    transform: translateY(0) rotate(-3deg);
-  }
-
-  100% {
-    transform: translateY(-4px) rotate(3deg);
-  }
+@keyframes spiderLegStepB {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(5deg); }
 }
 
-.timeline-cat-tracker.is-scrolling .kitty-tail {
-  animation: kittyTailFast 0.2s ease-in-out infinite alternate;
+/* Spider Bungee Hop on Click */
+.timeline-spider-tracker.spider-jump .timeline-spider-body,
+.timeline-spider-tracker.cat-jump .timeline-spider-body {
+  animation: spiderBungee 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-@keyframes kittyTailFast {
-  0% {
-    transform: rotate(-18deg);
-  }
-
-  100% {
-    transform: rotate(24deg);
-  }
-}
-
-.timeline-cat-tracker.is-scrolling .kitty-paw-right {
-  animation: kittyPawStep 0.22s ease-in-out infinite alternate;
-}
-
-@keyframes kittyPawStep {
-  0% {
-    transform: translateY(0);
-  }
-
-  100% {
-    transform: translateY(-3px);
-  }
-}
-
-/* Cute Paw Wave when Stopped */
-.timeline-cat-tracker.saying-hi .kitty-paw-right {
-  transform-origin: 48px 60px;
-  animation: kittyWave 0.75s ease-in-out infinite alternate;
-}
-
-@keyframes kittyWave {
-  0% {
-    transform: translateY(0) rotate(0deg);
-  }
-
-  100% {
-    transform: translateY(-8px) rotate(-30deg);
-  }
-}
-
-/* Playful Hop on Click */
-.timeline-cat-tracker.cat-jump .timeline-cat-body {
-  animation: kittyHop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes kittyHop {
-
-  0%,
-  100% {
+@keyframes spiderBungee {
+  0%, 100% {
     transform: scale(1) translateY(0);
   }
-
-  42% {
-    transform: scale(1.24) translateY(-16px);
+  40% {
+    transform: scale(1.2) translateY(-14px);
   }
 }
 
-/* Individual Timeline Milestone Item (Zero Box Enclosure) */
+/* Individual Timeline Milestone Item (Rich Colored Glassmorphic Card) */
 .timeline-item {
   position: relative;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border: none !important;
-  border-left: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  padding: 0 0 32px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
-  transition: all 0.3s ease;
+  background: linear-gradient(135deg, rgba(34, 13, 23, 0.78) 0%, rgba(20, 7, 14, 0.90) 100%) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(224, 75, 108, 0.25) !important;
+  border-left: 3px solid #e04b6c !important;
+  border-radius: 18px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.42), 0 0 20px rgba(224, 75, 108, 0.09) !important;
+  padding: 24px 28px !important;
+  margin-bottom: 24px;
+  border-bottom: none !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .timeline-item:last-child {
-  border-bottom: none !important;
-  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.timeline-item:hover {
+  background: linear-gradient(135deg, rgba(48, 18, 33, 0.88) 0%, rgba(26, 9, 18, 0.95) 100%) !important;
+  border-color: rgba(255, 120, 150, 0.45) !important;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.55), 0 0 28px rgba(224, 75, 108, 0.22) !important;
+  transform: translateX(4px) translateY(-2px) !important;
 }
 
 /* Milestone Node Orb on the Spine */
@@ -970,6 +996,7 @@ body {
     top: 11px;
   }
 
+  .timeline-spider-tracker,
   .timeline-cat-tracker {
     left: -16px;
     width: 44px;
@@ -1445,9 +1472,20 @@ body {
   margin-bottom: 0;
 }
 
-/* Hide tags & external link on project card face so card ends cleanly at the highlight box (square proportion)
-   All tags and GitHub link remain intact and are presented in the click popout modal */
-.project-card .project-tags,
+/* Hide highlight box on project card face so card shows just the clean summary.
+   Full detailed highlights & metrics are shown in the detailed popout modal */
+.project-card .project-highlight {
+  display: none !important;
+}
+
+.project-card .project-tags {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
 .project-card .project-link {
   display: none !important;
 }
@@ -1963,12 +2001,18 @@ body {
   border: 1px solid rgba(255, 230, 236, 0.12);
   border-radius: 18px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  transition: background 0.25s ease, border-color 0.25s ease;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.25s ease,
+    border-color 0.25s ease;
+  position: relative;
 }
 
 .contact-card-link:hover {
-  background: rgba(40, 16, 27, 0.90);
-  border-color: rgba(255, 230, 236, 0.28);
+  background: rgba(44, 18, 30, 0.90);
+  border-color: rgba(255, 140, 168, 0.35);
+  transform: translateY(-5px);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), 0 0 20px rgba(224, 75, 108, 0.2);
 }
 
 .contact-icon-box {
@@ -2008,14 +2052,69 @@ body {
   color: #ffffff;
 }
 
-.contact-card-arrow {
-  font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.4);
-  transition: color 0.2s ease;
+/* Interactive Copy Button */
+.contact-copy-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(224, 75, 108, 0.14);
+  border: 1px solid rgba(224, 75, 108, 0.32);
+  color: #ffb8c6;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-left: auto;
+  flex-shrink: 0;
+  z-index: 5;
 }
 
-.contact-card-link:hover .contact-card-arrow {
+.contact-copy-btn:hover {
+  background: rgba(224, 75, 108, 0.35);
+  border-color: rgba(255, 200, 215, 0.6);
   color: #ffffff;
+  transform: scale(1.08);
+}
+
+.contact-copy-btn .copy-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 50%;
+  transform: translateX(50%);
+  background: #180710;
+  border: 1px solid rgba(224, 75, 108, 0.35);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+.contact-copy-btn:hover .copy-tooltip {
+  opacity: 1;
+  transform: translateX(50%) translateY(-2px);
+}
+
+.contact-copy-btn.copied {
+  background: rgba(74, 222, 128, 0.2) !important;
+  border-color: rgba(74, 222, 128, 0.6) !important;
+  color: #4ade80 !important;
+}
+
+.contact-copy-btn.copied .copy-icon-idle {
+  display: none !important;
+}
+
+.contact-copy-btn.copied .copy-icon-done {
+  display: block !important;
 }
 
 .contact-form-card {
@@ -2939,6 +3038,7 @@ body {
     margin-top: 20px;
   }
 
+  .timeline-spider-tracker,
   .timeline-cat-tracker {
     left: -15px;
     width: 42px;

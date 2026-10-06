@@ -150,7 +150,7 @@ function resize() {
   const isMobilePortrait = canvasW <= 768 && canvasH >= canvasW;
 
   if (isMobilePortrait) {
-    // Full-bleed cover for mobile portrait: fills 100% height and width seamlessly (no cream bars)
+    // Full-bleed cover for mobile portrait: fills 100% height and width seamlessly
     renderH = canvasH;
     renderW = canvasH * videoAspect;
 
@@ -162,18 +162,22 @@ function resize() {
     faceCenterY = renderH * FACE_NORM_Y;
     deadzoneRadius = Math.min(canvasW, canvasH) * 0.15;
   } else {
-    // Desktop & Landscape: Object-fit cover geometry
-    if (screenAspect > videoAspect) {
-      renderW = canvasW;
-      renderH = canvasW / videoAspect;
-      offsetX = 0;
-      offsetY = (canvasH - renderH) / 2;
-    } else {
+    // Desktop & Landscape: Golden Ratio Subject Placement (Subject on the 61.8% golden section)
+    const baseScale = Math.max(canvasW / 1920, canvasH / 1080);
+    renderW = Math.max(1920 * baseScale, canvasW * 1.15);
+    renderH = renderW / videoAspect;
+    if (renderH < canvasH) {
       renderH = canvasH;
-      renderW = canvasH * videoAspect;
-      offsetX = (canvasW - renderW) / 2;
-      offsetY = 0;
+      renderW = renderH * videoAspect;
     }
+
+    // Align face with the golden ratio vertical line (~61.8% from left)
+    const targetFaceX = canvasW * 0.618;
+    let computedOffsetX = targetFaceX - (renderW * FACE_NORM_X);
+
+    // Keep frame anchored without leaving empty background
+    offsetX = Math.min(0, Math.max(canvasW - renderW, computedOffsetX));
+    offsetY = Math.min(0, (canvasH - renderH) / 2);
 
     faceCenterX = offsetX + renderW * FACE_NORM_X;
     faceCenterY = offsetY + renderH * FACE_NORM_Y;
@@ -316,6 +320,7 @@ document.querySelectorAll('.reveal-on-scroll').forEach(el => el.classList.add('i
 
 // 10. TOP-RIGHT HORIZONTAL NAV PILL HIGHLIGHT ON SCROLL & SMOOTH CLICK NAVIGATION
 const navSections = [
+  document.getElementById('about'),
   document.getElementById('experience'),
   document.getElementById('projects'),
   document.getElementById('products'),
@@ -759,19 +764,19 @@ if (contactForm) {
 }
 
 // =========================================================
-// 14. CUTE WHITE CAT TIMELINE COMPANION (Smooth Scroll Rail Rider)
+// 14. GLOWING SPIDER TIMELINE COMPANION (Smooth Scroll Rail Rider)
 // =========================================================
-function initTimelineCat() {
-  const cat = document.getElementById('timeline-cat');
+function initTimelineSpider() {
+  const spider = document.getElementById('timeline-spider') || document.getElementById('timeline-cat');
   const container = document.querySelector('.timeline-container');
-  if (!cat || !container) return;
+  if (!spider || !container) return;
 
   let scrollStopTimeout = null;
   let isTicking = false;
   let currentY = 0;
   let targetY = 0;
 
-  function updateCatPosition() {
+  function updateSpiderPosition() {
     const rect = container.getBoundingClientRect();
     const windowHeight = window.innerHeight;
 
@@ -779,7 +784,7 @@ function initTimelineCat() {
     const focalPoint = windowHeight * 0.42;
     const computedY = focalPoint - rect.top;
 
-    // Clamp between top (0) and bottom of timeline (container height - cat height)
+    // Clamp between top (0) and bottom of timeline (container height - spider height)
     const maxY = Math.max(0, container.offsetHeight - 52);
     targetY = Math.max(0, Math.min(computedY, maxY));
 
@@ -789,60 +794,101 @@ function initTimelineCat() {
       currentY = targetY;
     }
 
-    cat.style.transform = `translate3d(0, ${currentY}px, 0)`;
+    spider.style.transform = `translate3d(0, ${currentY}px, 0)`;
 
     if (Math.abs(targetY - currentY) >= 0.3) {
-      requestAnimationFrame(updateCatPosition);
+      requestAnimationFrame(updateSpiderPosition);
     } else {
       isTicking = false;
     }
   }
 
   function handleScroll() {
-    // While scrolling, cat plays active walking sway
-    cat.classList.add('is-scrolling');
-    cat.classList.remove('saying-hi');
+    // While scrolling, spider plays active crawling animation
+    spider.classList.add('is-scrolling');
 
     if (!isTicking) {
       isTicking = true;
-      requestAnimationFrame(updateCatPosition);
+      requestAnimationFrame(updateSpiderPosition);
     }
 
-    // Debounce scroll stop: when user stops scrolling, settle and paw wave
+    // Debounce scroll stop: when user stops scrolling, settle
     clearTimeout(scrollStopTimeout);
     scrollStopTimeout = setTimeout(() => {
-      cat.classList.remove('is-scrolling');
-      cat.classList.add('saying-hi');
+      spider.classList.remove('is-scrolling');
     }, 200);
   }
 
   window.addEventListener('scroll', handleScroll, { passive: true });
   window.addEventListener('resize', () => {
-    updateCatPosition();
+    updateSpiderPosition();
   }, { passive: true });
 
   // Initial placement calculation
-  updateCatPosition();
+  updateSpiderPosition();
 
-  // Playful click interaction: cute hop
-  cat.addEventListener('click', (e) => {
+  // Playful click interaction: silk bungee hop
+  spider.addEventListener('click', (e) => {
     e.stopPropagation();
-    cat.classList.add('cat-jump');
+    spider.classList.add('spider-jump');
     setTimeout(() => {
-      cat.classList.remove('cat-jump');
+      spider.classList.remove('spider-jump');
     }, 450);
+  });
+}
+
+// =========================================================
+// 14B. CONTACT COPY BUTTONS INTERACTION
+// =========================================================
+function initContactCopyButtons() {
+  document.querySelectorAll('.contact-copy-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const textToCopy = btn.dataset.copy || '';
+      if (!textToCopy) return;
+
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(textToCopy);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = textToCopy;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+
+        btn.classList.add('copied');
+        const tooltip = btn.querySelector('.copy-tooltip');
+        if (tooltip) tooltip.textContent = 'Copied!';
+
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          if (tooltip) tooltip.textContent = 'Copy';
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+      }
+    });
   });
 }
 
 // Initialize on DOM ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    initTimelineCat();
+    initTimelineSpider();
+    initContactCopyButtons();
     initProjectPopout();
     initMobileNavigation();
   });
 } else {
-  initTimelineCat();
+  initTimelineSpider();
+  initContactCopyButtons();
   initProjectPopout();
   initMobileNavigation();
 }

@@ -140,7 +140,7 @@
     <div class="hero-content" aria-label="Hero Introduction">
       <h1 class="hero-title">Sai Sahithi</h1>
       <p class="hero-tagline">
-        I build software that works.<span class="typing-cursor" aria-hidden="true">|</span>
+        I build software <span class="tagline-highlight">that works.</span><span class="typing-cursor" aria-hidden="true">|</span>
       </p>
       <p class="hero-bio">
         Software Engineer turning ideas into scalable, real-world solutions.
@@ -171,6 +171,62 @@
       <canvas class="content-web-canvas" id="spiderweb-canvas"></canvas>
     </div>
 
+    <!-- 00: ABOUT SECTION (5-Line Impact Profile) -->
+    <section class="page-section" id="about">
+      <div class="section-container">
+        <div class="reveal-on-scroll">
+          <div class="section-eyebrow-row">
+            <span class="section-eyebrow">ABOUT ME</span>
+          </div>
+          <h2 class="section-title">Architecting Robust Systems &amp; Applied AI</h2>
+        </div>
+
+        <div class="about-card glass-card reveal-on-scroll">
+          <div class="about-description">
+            <div class="about-line-row">
+              <span class="about-line-num">01</span>
+              <p class="about-line-text">I am a Backend &amp; Applied AI Engineer specializing in resilient microservices, distributed workflows, and production RAG pipelines.</p>
+            </div>
+            <div class="about-line-row">
+              <span class="about-line-num">02</span>
+              <p class="about-line-text">With industry engineering at Dhan AI and EPICS, I design fault-tolerant systems handling real-time data flows and enterprise CRM integrations.</p>
+            </div>
+            <div class="about-line-row">
+              <span class="about-line-num">03</span>
+              <p class="about-line-text">My technical core centers on Python, FastAPI, Apache Kafka, and optimized retrieval engines that reduce query latency by up to 90%.</p>
+            </div>
+            <div class="about-line-row">
+              <span class="about-line-num">04</span>
+              <p class="about-line-text">I bridge the gap between cutting-edge LLMs and real-world hardware, building end-to-end solutions from IoT telemetry to AI-assisted robotics.</p>
+            </div>
+            <div class="about-line-row">
+              <span class="about-line-num">05</span>
+              <p class="about-line-text">Driven by performance and clean design, I focus on shipping maintainable, high-throughput software that creates tangible, lasting impact.</p>
+            </div>
+          </div>
+
+          <div class="about-stats-grid">
+            <div class="about-stat-item">
+              <span class="about-stat-number">90%</span>
+              <span class="about-stat-label">Latency Reduction via CAG</span>
+            </div>
+            <div class="about-stat-item">
+              <span class="about-stat-number">0.5s</span>
+              <span class="about-stat-label">Sub-Second RAG Queries</span>
+            </div>
+            <div class="about-stat-item">
+              <span class="about-stat-number">6+</span>
+              <span class="about-stat-label">Production &amp; IoT Deployments</span>
+            </div>
+            <div class="about-stat-item">
+              <span class="about-stat-number">9.1</span>
+              <span class="about-stat-label">CGPA in AI &amp; Machine Learning</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- 01: EXPERIENCE SECTION -->
     <section class="page-section" id="experience">
       <div class="section-container">
@@ -190,137 +246,72 @@
 
         <div class="timeline-container reveal-on-scroll">
 
-          <!-- Cute Kawaii White Cat Timeline Companion (Scrolls along rail) -->
-          <div class="timeline-cat-tracker" id="timeline-cat" aria-label="Cute kawaii white cat companion" role="img">
-            <div class="timeline-cat-body">
-              <svg viewBox="0 0 80 80" width="50" height="50" fill="none" xmlns="http://www.w3.org/2000/svg"
-                class="cat-svg kitty-svg">
+          <!-- Glowing Bioluminescent Spider Companion (Descends on silk rail) -->
+          <div class="timeline-spider-tracker" id="timeline-spider" aria-label="Luminous spider companion" role="img">
+            <div class="timeline-spider-body">
+              <svg viewBox="0 0 70 70" width="52" height="52" fill="none" xmlns="http://www.w3.org/2000/svg" class="spider-svg">
                 <defs>
-                  <!-- Soft Plush Gradient Shading -->
-                  <linearGradient id="catPlushGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#ffffff" />
-                    <stop offset="70%" stop-color="#fff4f7" />
-                    <stop offset="100%" stop-color="#f8e1e8" />
+                  <linearGradient id="spiderPlushGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#4a1525" />
+                    <stop offset="50%" stop-color="#240b15" />
+                    <stop offset="100%" stop-color="#12050a" />
                   </linearGradient>
-
-                  <linearGradient id="catInnerEar" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#ffb3c6" />
-                    <stop offset="100%" stop-color="#ff6b8b" />
-                  </linearGradient>
-
-                  <radialGradient id="catCheekBlush" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#ff6b8b" stop-opacity="0.6" />
-                    <stop offset="100%" stop-color="#ff6b8b" stop-opacity="0" />
+                  <radialGradient id="spiderGemGrad" cx="50%" cy="45%" r="55%">
+                    <stop offset="0%" stop-color="#ff758f" />
+                    <stop offset="60%" stop-color="#e04b6c" />
+                    <stop offset="100%" stop-color="#801026" />
                   </radialGradient>
-
-                  <!-- Glowing Rim Drop Shadow -->
-                  <filter id="kittyGlow" x="-25%" y="-25%" width="150%" height="150%">
-                    <feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.55" />
-                    <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#e04b6c" flood-opacity="0.4" />
+                  <filter id="spiderGlow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.7" />
+                    <feDropShadow dx="0" dy="0" stdDeviation="4.5" flood-color="#e04b6c" flood-opacity="0.55" />
                   </filter>
                 </defs>
 
-                <g filter="url(#kittyGlow)">
-                  <!-- Fluffy Curved Tail -->
-                  <path class="kitty-tail" d="M26 60 C15 59 10 48 14 40 C16 36 21 38 19 42 C16 48 20 54 28 55"
-                    stroke="url(#catPlushGrad)" stroke-width="6" stroke-linecap="round" fill="none" />
-                  <circle cx="16" cy="38" r="2.8" fill="#ffccd5" />
+                <g filter="url(#spiderGlow)">
+                  <!-- Silk Dragline Thread -->
+                  <line class="spider-silk-line" x1="35" y1="0" x2="35" y2="24" stroke="rgba(255, 230, 240, 0.75)" stroke-width="1.4" stroke-dasharray="3 1.5" />
 
-                  <!-- Chubby Body -->
-                  <ellipse cx="40" cy="54" rx="21" ry="17" fill="url(#catPlushGrad)" />
-
-                  <!-- Left Ear (Twitch Animation) -->
-                  <g class="kitty-ear-left">
-                    <path d="M21 24 C19 17 21 9 28 7 C32 6 34 12 35 17 Z" fill="url(#catPlushGrad)" />
-                    <path d="M23 22 C21 17 23 12 27 10 C30 9 31 13 32 17 Z" fill="url(#catInnerEar)" />
+                  <!-- Spider Legs Left (L1 to L4) -->
+                  <g class="spider-legs-left">
+                    <path class="spider-leg leg-l1" d="M29 26 C20 16 14 18 8 23 C5 26 3 31 1 36" stroke="#ff8da1" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                    <path class="spider-leg leg-l2" d="M28 29 C17 23 10 28 5 35 C2 40 1 45 0 51" stroke="#e04b6c" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                    <path class="spider-leg leg-l3" d="M28 34 C16 33 11 41 7 49 C4 55 3 61 2 67" stroke="#e04b6c" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                    <path class="spider-leg leg-l4" d="M29 38 C19 43 16 53 14 62 C12 67 11 72 10 76" stroke="#ff8da1" stroke-width="1.8" stroke-linecap="round" fill="none" />
                   </g>
 
-                  <!-- Right Ear -->
-                  <g class="kitty-ear-right">
-                    <path d="M59 24 C61 17 59 9 52 7 C48 6 46 12 45 17 Z" fill="url(#catPlushGrad)" />
-                    <path d="M57 22 C59 17 57 12 53 10 C50 9 49 13 48 17 Z" fill="url(#catInnerEar)" />
+                  <!-- Spider Legs Right (R1 to R4) -->
+                  <g class="spider-legs-right">
+                    <path class="spider-leg leg-r1" d="M41 26 C50 16 56 18 62 23 C65 26 67 31 69 36" stroke="#ff8da1" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                    <path class="spider-leg leg-r2" d="M42 29 C53 23 60 28 65 35 C68 40 69 45 70 51" stroke="#e04b6c" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                    <path class="spider-leg leg-r3" d="M42 34 C54 33 59 41 63 49 C66 55 67 61 68 67" stroke="#e04b6c" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                    <path class="spider-leg leg-r4" d="M41 38 C51 43 54 53 56 62 C58 67 59 72 60 76" stroke="#ff8da1" stroke-width="1.8" stroke-linecap="round" fill="none" />
                   </g>
 
-                  <!-- Cute Winter-Spring Blossom Accessory behind Ear -->
-                  <g class="kitty-blossom" transform="translate(53, 17) scale(0.72)">
-                    <circle cx="0" cy="-5.5" r="3.8" fill="#ffb7c5" />
-                    <circle cx="5.2" cy="-1.7" r="3.8" fill="#ffccd5" />
-                    <circle cx="3.2" cy="4.4" r="3.8" fill="#ffb7c5" />
-                    <circle cx="-3.2" cy="4.4" r="3.8" fill="#ffccd5" />
-                    <circle cx="-5.2" cy="-1.7" r="3.8" fill="#ffb7c5" />
-                    <circle cx="0" cy="0" r="2.2" fill="#8a1d33" />
-                    <circle cx="0" cy="0" r="1.1" fill="#ffd166" />
+                  <!-- Pedipalps (Front feelers) -->
+                  <path d="M32 23 C30 18 28 17 26 19" stroke="#ffb8c6" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                  <path d="M38 23 C40 18 42 17 44 19" stroke="#ffb8c6" stroke-width="1.5" stroke-linecap="round" fill="none" />
+
+                  <!-- Abdomen (Rear body) -->
+                  <ellipse cx="35" cy="42" rx="11" ry="14" fill="url(#spiderPlushGrad)" stroke="#ff758f" stroke-width="1.2" />
+
+                  <!-- Abdomen Bioluminescent Jewel Pattern -->
+                  <path d="M35 32 L39 40 L35 52 L31 40 Z" fill="url(#spiderGemGrad)" />
+                  <circle cx="35" cy="40" r="2.2" fill="#ffffff" />
+                  <circle cx="35" cy="47" r="1.4" fill="#ffd166" />
+                  <circle cx="35" cy="35" r="1.2" fill="#ffd166" />
+
+                  <!-- Cephalothorax (Head) -->
+                  <ellipse cx="35" cy="27" rx="8" ry="6.5" fill="url(#spiderPlushGrad)" stroke="#ff758f" stroke-width="1.2" />
+
+                  <!-- Glowing Jewel Eyes (Cluster of 6 twinkling jewels) -->
+                  <g class="spider-eyes">
+                    <circle cx="33" cy="24.5" r="1.5" fill="#ffffff" />
+                    <circle cx="37" cy="24.5" r="1.5" fill="#ffffff" />
+                    <circle cx="30.5" cy="26" r="1.1" fill="#ffd166" />
+                    <circle cx="39.5" cy="26" r="1.1" fill="#ffd166" />
+                    <circle cx="33.5" cy="27.5" r="0.9" fill="#ff758f" />
+                    <circle cx="36.5" cy="27.5" r="0.9" fill="#ff758f" />
                   </g>
-
-                  <!-- Chubby Squishy Head -->
-                  <ellipse cx="40" cy="33" rx="22" ry="18" fill="url(#catPlushGrad)" />
-
-                  <!-- Left Cheek Fluff -->
-                  <path d="M19 35 C14 36 14 40 19 42 C15 43 16 47 21 46" fill="url(#catPlushGrad)" />
-                  <!-- Right Cheek Fluff -->
-                  <path d="M61 35 C66 36 66 40 61 42 C65 43 64 47 59 46" fill="url(#catPlushGrad)" />
-
-                  <!-- Rosy Airbrushed Blushes -->
-                  <ellipse cx="24" cy="37" rx="5" ry="2.8" fill="url(#catCheekBlush)" />
-                  <ellipse cx="56" cy="37" rx="5" ry="2.8" fill="url(#catCheekBlush)" />
-
-                  <!-- Big Sparkling Boba Anime Eyes (with natural blink) -->
-                  <g class="kitty-eyes">
-                    <!-- Left Eye -->
-                    <ellipse cx="30" cy="32" rx="4.2" ry="5.2" fill="#1b0813" />
-                    <circle cx="28.8" cy="29.8" r="2" fill="#ffffff" />
-                    <circle cx="32" cy="33.8" r="1.1" fill="#ffffff" />
-                    <circle cx="29.2" cy="34.8" r="0.7" fill="#ffffff" />
-
-                    <!-- Right Eye -->
-                    <ellipse cx="50" cy="32" rx="4.2" ry="5.2" fill="#1b0813" />
-                    <circle cx="48.8" cy="29.8" r="2" fill="#ffffff" />
-                    <circle cx="52" cy="33.8" r="1.1" fill="#ffffff" />
-                    <circle cx="49.2" cy="34.8" r="0.7" fill="#ffffff" />
-                  </g>
-
-                  <!-- Sweet Pink Nose -->
-                  <path d="M38.8 36.5 Q40 36 41.2 36.5 Q40 38.2 38.8 36.5 Z" fill="#ff6b8b" />
-
-                  <!-- Cute Smiling Kitten Mouth (・ω・) -->
-                  <path d="M36 38.8 Q40 41.8 40 39.5 Q40 41.8 44 38.8" stroke="#c83b58" stroke-width="1.5"
-                    stroke-linecap="round" fill="none" />
-
-                  <!-- Elegant Soft Pink Whiskers -->
-                  <path d="M18 33 Q10 32 5 30" stroke="#ffccd5" stroke-width="1.1" stroke-linecap="round" fill="none" />
-                  <path d="M18 37 Q10 38 4 40" stroke="#ffccd5" stroke-width="1.1" stroke-linecap="round" fill="none" />
-                  <path d="M62 33 Q70 32 75 30" stroke="#ffccd5" stroke-width="1.1" stroke-linecap="round"
-                    fill="none" />
-                  <path d="M62 37 Q70 38 76 40" stroke="#ffccd5" stroke-width="1.1" stroke-linecap="round"
-                    fill="none" />
-
-                  <!-- Rose Ribbon Collar & Golden Bell -->
-                  <path d="M26 44 Q40 49 54 44" stroke="#e04b6c" stroke-width="2.4" stroke-linecap="round"
-                    fill="none" />
-                  <circle cx="40" cy="48" r="3.2" fill="#ffd166" />
-                  <circle cx="40" cy="48" r="1.3" fill="#f4a261" />
-
-                  <!-- Left Paws with Pink Jellybean Pads -->
-                  <g class="kitty-paw-left">
-                    <ellipse cx="32" cy="60" rx="5.2" ry="4.2" fill="#ffffff" stroke="#ffccd5" stroke-width="0.9" />
-                    <ellipse cx="32" cy="60" rx="2.3" ry="1.8" fill="#ffb3c6" />
-                    <circle cx="29.8" cy="57.8" r="0.9" fill="#ffb3c6" />
-                    <circle cx="32" cy="56.8" r="0.9" fill="#ffb3c6" />
-                    <circle cx="34.2" cy="57.8" r="0.9" fill="#ffb3c6" />
-                  </g>
-
-                  <!-- Right Paws (waves when stopped!) -->
-                  <g class="kitty-paw-right">
-                    <ellipse cx="48" cy="60" rx="5.2" ry="4.2" fill="#ffffff" stroke="#ffccd5" stroke-width="0.9" />
-                    <ellipse cx="48" cy="60" rx="2.3" ry="1.8" fill="#ffb3c6" />
-                    <circle cx="45.8" cy="57.8" r="0.9" fill="#ffb3c6" />
-                    <circle cx="48" cy="56.8" r="0.9" fill="#ffb3c6" />
-                    <circle cx="50.2" cy="57.8" r="0.9" fill="#ffb3c6" />
-                  </g>
-
-                  <!-- Magical Twinkle Sparkle near Ear -->
-                  <path class="kitty-sparkle" d="M60 13 Q62 16 65 16 Q62 16 60 19 Q58 16 55 16 Q58 16 60 13 Z"
-                    fill="#ffd166" />
                 </g>
               </svg>
             </div>
@@ -438,7 +429,7 @@
           <div class="timeline-item">
             <div class="timeline-header">
               <div>
-                <h3 class="card-title">Team Lead — Software Development</h3>
+                <h3 class="card-title">Lead Software Engineer</h3>
                 <span class="timeline-company">
                   <a href="https://epics.engineering.asu.edu/" target="_blank" rel="noopener"
                     style="color: inherit; text-decoration: underline;">
@@ -479,106 +470,6 @@
                   <span>IoT</span>
                   <span>ESP32</span>
                   <span>Firebase</span>
-                  <span>Machine Learning</span>
-                </div>
-              </div>
-            </div>
-
-            <button class="timeline-read-more" type="button" aria-expanded="false">
-              <span class="read-more-text">Read more</span>
-              <svg class="read-more-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </button>
-          </div>
-
-
-          <!-- Assistive Technology Lab -->
-          <div class="timeline-item">
-            <div class="timeline-header">
-              <div>
-                <h3 class="card-title">Project Manager</h3>
-                <span class="timeline-company">
-                  <a href="https://svecw.edu.in/assistive-technology-lab-atl/" target="_blank" rel="noopener"
-                    style="color: inherit; text-decoration: underline;">
-                    Assistive Technology Lab
-                  </a>
-                </span>
-              </div>
-              <span class="timeline-date">2024 – 2025</span>
-            </div>
-
-            <p class="experience-intro">
-              Exploring how machine learning and embedded systems can make
-              assistive technology more intuitive and accessible.
-            </p>
-
-            <div class="timeline-collapsible">
-              <div class="timeline-collapsible-inner">
-                <ul class="bullet-list">
-                  <li>
-                    Developed an <strong>EMG-based gesture recognition system</strong>
-                    for controlling a prosthetic arm.
-                  </li>
-                  <li>
-                    Built the real-time processing pipeline using
-                    <strong>Python and Raspberry Pi</strong>.
-                  </li>
-                  <li>
-                    Combined signal processing and machine learning to translate
-                    muscle signals into prosthetic movement.
-                  </li>
-                </ul>
-
-                <div class="experience-tags">
-                  <span>Python</span>
-                  <span>Machine Learning</span>
-                  <span>Raspberry Pi</span>
-                  <span>EMG</span>
-                </div>
-              </div>
-            </div>
-
-            <button class="timeline-read-more" type="button" aria-expanded="false">
-              <span class="read-more-text">Read more</span>
-              <svg class="read-more-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </button>
-          </div>
-
-
-          <!-- SkillDzire -->
-          <div class="timeline-item">
-            <div class="timeline-header">
-              <div>
-                <h3 class="card-title">Artificial Intelligence Intern</h3>
-                <span class="timeline-company">SkillDzire</span>
-              </div>
-              <span class="timeline-date">Jan 2025 – Mar 2025</span>
-            </div>
-
-            <p class="experience-intro">
-              Worked on practical machine learning workflows, from data preparation
-              to model development and evaluation.
-            </p>
-
-            <div class="timeline-collapsible">
-              <div class="timeline-collapsible-inner">
-                <ul class="bullet-list">
-                  <li>
-                    Developed machine learning models using
-                    <strong>Python and Scikit-learn</strong>.
-                  </li>
-                  <li>
-                    Worked on data preprocessing, model validation,
-                    and documenting machine learning workflows.
-                  </li>
-                </ul>
-
-                <div class="experience-tags">
-                  <span>Python</span>
-                  <span>Scikit-learn</span>
                   <span>Machine Learning</span>
                 </div>
               </div>
@@ -650,7 +541,11 @@
         <!-- Projects Carousel with Vertically Centered Left/Right Navigation -->
         <div class="projects-carousel-wrapper reveal-on-scroll">
           <button class="batch-nav-btn batch-nav-prev magnetic-target" id="btn-batch-prev"
-            aria-label="Previous Projects Batch">&lt;</button>
+            aria-label="Previous Projects Batch">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
 
           <div class="projects-carousel-track">
             <!-- BATCH 1: PROJECTS 1, 2, 3 -->
@@ -859,15 +754,27 @@
           </div>
 
           <button class="batch-nav-btn batch-nav-next magnetic-target" id="btn-batch-next"
-            aria-label="Next Projects Batch">&gt;</button>
+            aria-label="Next Projects Batch">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
 
           <!-- Mobile Only: One Project at a Time Navigation -->
           <div class="mobile-project-controls" id="mobile-project-controls">
-            <button class="mobile-project-nav-btn" id="btn-mobile-project-prev" aria-label="Previous Project">&lt;</button>
+            <button class="mobile-project-nav-btn" id="btn-mobile-project-prev" aria-label="Previous Project">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
             <div class="mobile-project-counter" id="mobile-project-counter">
               <span>Project</span> <span id="mobile-project-current" class="counter-highlight">1</span> <span class="counter-sep">/</span> <span id="mobile-project-total">6</span>
             </div>
-            <button class="mobile-project-nav-btn" id="btn-mobile-project-next" aria-label="Next Project">&gt;</button>
+            <button class="mobile-project-nav-btn" id="btn-mobile-project-next" aria-label="Next Project">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -1100,7 +1007,7 @@
           <!-- Direct Links Column -->
           <div class="contact-cards-col">
             <!-- Email -->
-            <a href="mailto:sahitikontam@gmail.com" class="contact-card-link magnetic-target" data-cursor="hover">
+            <a href="mailto:sahitikontam@gmail.com" class="contact-card-link" data-cursor="hover">
               <div class="contact-icon-box">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                   stroke-linecap="round" stroke-linejoin="round">
@@ -1112,12 +1019,21 @@
                 <div class="contact-card-label">EMAIL DIRECTLY</div>
                 <div class="contact-card-val">sahitikontam@gmail.com</div>
               </div>
-              <div class="contact-card-arrow">↗</div>
+              <button type="button" class="contact-copy-btn" data-copy="sahitikontam@gmail.com" aria-label="Copy email address" title="Copy to clipboard">
+                <svg class="copy-icon-idle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="copy-icon-done" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-tooltip">Copy</span>
+              </button>
             </a>
 
             <!-- LinkedIn -->
             <a href="https://in.linkedin.com/in/sahithi-kontam" target="_blank" rel="noopener"
-              class="contact-card-link magnetic-target" data-cursor="hover">
+              class="contact-card-link" data-cursor="hover">
               <div class="contact-icon-box">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                   stroke-linecap="round" stroke-linejoin="round">
@@ -1130,12 +1046,21 @@
                 <div class="contact-card-label">LINKEDIN</div>
                 <div class="contact-card-val">in/sahithi-kontam</div>
               </div>
-              <div class="contact-card-arrow">↗</div>
+              <button type="button" class="contact-copy-btn" data-copy="https://in.linkedin.com/in/sahithi-kontam" aria-label="Copy LinkedIn profile link" title="Copy to clipboard">
+                <svg class="copy-icon-idle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="copy-icon-done" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-tooltip">Copy</span>
+              </button>
             </a>
 
             <!-- GitHub -->
             <a href="https://github.com/sahithiK04" target="_blank" rel="noopener"
-              class="contact-card-link magnetic-target" data-cursor="hover">
+              class="contact-card-link" data-cursor="hover">
               <div class="contact-icon-box">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                   stroke-linecap="round" stroke-linejoin="round">
@@ -1148,7 +1073,16 @@
                 <div class="contact-card-label">GITHUB</div>
                 <div class="contact-card-val">github.com/sahithiK04</div>
               </div>
-              <div class="contact-card-arrow">↗</div>
+              <button type="button" class="contact-copy-btn" data-copy="https://github.com/sahithiK04" aria-label="Copy GitHub profile link" title="Copy to clipboard">
+                <svg class="copy-icon-idle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="copy-icon-done" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-tooltip">Copy</span>
+              </button>
             </a>
           </div>
 

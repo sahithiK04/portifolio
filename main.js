@@ -1,16 +1,147 @@
 /**
- * SAI SAHITHI KONTAM PORTFOLIO — HIGH PERFORMANCE ZERO-LAG
- * FLORAL PORTRAIT & SCROLLABLE LUXURY SECTIONS
+ * SAI SAHITHI KONTAM PORTFOLIO — 60 FPS ZERO-LAG INTERACTIVE HERO
+ * CHARACTER TRACKING & SCROLLABLE LUXURY SECTIONS
  */
 
-// 1. DOM ELEMENTS
+// 1. CONFIGURATION & CONSTANTS
+const TOTAL_FRAMES = 64;
+const BG_HEX = '#c7bbb7'; // Exact video backdrop tone
+const FACE_NORM_X = 0.525; // Face center X in 1920x1080 source
+const FACE_NORM_Y = 0.380; // Face center Y in 1920x1080 source
+const LERP_FACTOR = 0.22;  // Fluid ~40ms tracking response
+
+// 2. DOM ELEMENTS
+const canvas = document.getElementById('character-canvas');
+const ctx = canvas ? canvas.getContext('2d', { alpha: false }) : null;
 const loadingScreen = document.getElementById('loading-screen');
 const loaderProgress = document.getElementById('loader-progress');
 const cursorDot = document.getElementById('cursor-dot');
 const cursorRing = document.getElementById('cursor-ring');
+const heroSection = document.getElementById('hero');
 
-// 2. DISMISS LOADING SCREEN (Instant, silky smooth)
+// 3. STATE
+const images = new Array(TOTAL_FRAMES);
+const loadedFrames = new Set();
+let centerImage = null;
+let isReady = false;
+let isHeroVisible = true;
+let isModalOpen = false;
+
+let mouseX = window.innerWidth * 0.5;
+let mouseY = window.innerHeight * 0.433;
+let targetMouseX = mouseX;
+let targetMouseY = mouseY;
+let ringX = mouseX;
+let ringY = mouseY;
+let isMouseActive = false;
+
+let currentAngle = 0;
+let inDeadzone = true;
+let lastDrawnFrame = null;
+let updateTimelineSpiderFn = null;
+
+// Geometry variables
+let canvasW = window.innerWidth;
+let canvasH = window.innerHeight;
+let renderW = 0;
+let renderH = 0;
+let offsetX = 0;
+let offsetY = 0;
+let faceCenterX = 0;
+let faceCenterY = 0;
+let deadzoneRadius = 0;
+
+// Shortest-path angular circular interpolation
+function lerpAngle(current, target, factor) {
+  let diff = (target - current) % (2 * Math.PI);
+  if (diff < -Math.PI) diff += 2 * Math.PI;
+  if (diff > Math.PI) diff -= 2 * Math.PI;
+  return current + diff * factor;
+}
+
+// 4. FIND NEAREST LOADED FRAME (NEVER FREEZE, NEVER LAG, NEVER GET STUCK)
+function getNearestLoadedFrame(targetIdx) {
+  if (loadedFrames.has(targetIdx) && images[targetIdx]) {
+    return images[targetIdx];
+  }
+  for (let offset = 1; offset < TOTAL_FRAMES / 2; offset++) {
+    const next = (targetIdx + offset) % TOTAL_FRAMES;
+    if (loadedFrames.has(next) && images[next]) return images[next];
+    const prev = (targetIdx - offset + TOTAL_FRAMES) % TOTAL_FRAMES;
+    if (loadedFrames.has(prev) && images[prev]) return images[prev];
+  }
+  return centerImage;
+}
+
+// 5. DRAW CANVAS (DIRTY-CHECKED: ONLY DRAWS WHEN FRAME CHANGES)
+function drawFrame(frame) {
+  if (!ctx || !isReady) return;
+  const target = frame || centerImage;
+  if (!target || !target.complete || target.naturalWidth === 0) return;
+
+  ctx.fillStyle = BG_HEX;
+  ctx.fillRect(0, 0, canvasW, canvasH);
+  ctx.drawImage(target, offsetX, offsetY, renderW, renderH);
+  lastDrawnFrame = target;
+}
+
+// 6. RESIZE & GOLDEN RATIO GEOMETRY
+function resize() {
+  if (!canvas || !ctx) return;
+  canvasW = window.innerWidth;
+  canvasH = window.innerHeight;
+
+  // Cap DPR at 1 for 60-120fps hardware-accelerated zero-lag rendering
+  const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+  canvas.width = Math.round(canvasW * dpr);
+  canvas.height = Math.round(canvasH * dpr);
+  canvas.style.width = `${canvasW}px`;
+  canvas.style.height = `${canvasH}px`;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(dpr, dpr);
+
+  const videoAspect = 1920 / 1080;
+  const isMobilePortrait = canvasW <= 768 && canvasH >= canvasW;
+
+  if (isMobilePortrait) {
+    renderH = canvasH;
+    renderW = canvasH * videoAspect;
+    offsetX = (canvasW * 0.5) - (renderW * FACE_NORM_X);
+    offsetY = 0;
+    faceCenterX = canvasW * 0.5;
+    faceCenterY = renderH * FACE_NORM_Y;
+    deadzoneRadius = Math.min(canvasW, canvasH) * 0.15;
+  } else {
+    // Desktop & Landscape: Golden Ratio Subject Placement (Subject on the 61.8% golden section)
+    const baseScale = Math.max(canvasW / 1920, canvasH / 1080);
+    renderW = Math.max(1920 * baseScale, canvasW * 1.15);
+    renderH = renderW / videoAspect;
+    if (renderH < canvasH) {
+      renderH = canvasH;
+      renderW = renderH * videoAspect;
+    }
+
+    const targetFaceX = canvasW * 0.618;
+    let computedOffsetX = targetFaceX - (renderW * FACE_NORM_X);
+    offsetX = Math.min(0, Math.max(canvasW - renderW, computedOffsetX));
+    offsetY = Math.min(0, (canvasH - renderH) / 2);
+
+    faceCenterX = offsetX + renderW * FACE_NORM_X;
+    faceCenterY = offsetY + renderH * FACE_NORM_Y;
+    deadzoneRadius = Math.min(canvasW, canvasH) * 0.12;
+  }
+
+  lastDrawnFrame = null;
+  drawFrame(centerImage);
+}
+
+window.addEventListener('resize', resize);
+
+// 7. DISMISS LOADING SCREEN
+let loaderDismissed = false;
 function dismissLoader() {
+  if (loaderDismissed) return;
+  loaderDismissed = true;
   if (loaderProgress) {
     loaderProgress.style.width = '100%';
   }
@@ -18,24 +149,130 @@ function dismissLoader() {
     if (loadingScreen) {
       loadingScreen.classList.add('hidden');
     }
-  }, 100);
+  }, 120);
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', dismissLoader);
-} else {
-  dismissLoader();
+// 8. ASSET PRELOADING & FAST CIRCULAR HYDRATION
+function initCharacterAssets() {
+  resize();
+
+  centerImage = new Image();
+  centerImage.src = 'frames/center.webp';
+
+  const onCenterReady = () => {
+    isReady = true;
+    drawFrame(centerImage);
+    dismissLoader();
+    loadRemainingFrames();
+  };
+
+  centerImage.onload = () => {
+    if (centerImage.decode) {
+      centerImage.decode().then(onCenterReady).catch(onCenterReady);
+    } else {
+      onCenterReady();
+    }
+  };
+
+  centerImage.onerror = () => {
+    centerImage.src = 'public/frames/center.webp';
+    centerImage.onload = onCenterReady;
+    centerImage.onerror = () => {
+      isReady = true;
+      dismissLoader();
+    };
+  };
+
+  // Fallback safety: never hang loader longer than 1.2s
+  setTimeout(dismissLoader, 1200);
 }
 
-// 3. SMOOTH CUSTOM CURSOR
-let mouseX = window.innerWidth * 0.5;
-let mouseY = window.innerHeight * 0.5;
-let targetMouseX = mouseX;
-let targetMouseY = mouseY;
-let ringX = mouseX;
-let ringY = mouseY;
+function loadRemainingFrames() {
+  // Octant priority: load cardinal 8 directions first, then fill in 16, then 64
+  const priorityOrder = [];
+  [8, 4, 2, 1].forEach((step) => {
+    for (let i = 0; i < TOTAL_FRAMES; i += step) {
+      if (!priorityOrder.includes(i)) priorityOrder.push(i);
+    }
+  });
 
+  priorityOrder.forEach((idx) => {
+    const img = new Image();
+    img.src = `frames/frame_${idx}.webp`;
+
+    const registerFrame = () => {
+      images[idx] = img;
+      loadedFrames.add(idx);
+    };
+
+    img.onload = () => {
+      if (img.decode) {
+        img.decode().then(registerFrame).catch(registerFrame);
+      } else {
+        registerFrame();
+      }
+    };
+
+    img.onerror = () => {
+      img.src = `public/frames/frame_${idx}.webp`;
+      img.onload = registerFrame;
+    };
+  });
+}
+
+initCharacterAssets();
+
+// 9. ANIMATION LOOP (DIRTY-CHECKED RENDERING FOR ZERO LAG)
+function render() {
+  // Smooth mouse interpolation
+  mouseX += (targetMouseX - mouseX) * 0.45;
+  mouseY += (targetMouseY - mouseY) * 0.45;
+
+  // Smooth custom cursor trailing ring
+  if (cursorRing) {
+    ringX += (targetMouseX - ringX) * 0.22;
+    ringY += (targetMouseY - ringY) * 0.22;
+    cursorRing.style.left = `${ringX}px`;
+    cursorRing.style.top = `${ringY}px`;
+  }
+
+  if (isReady && isHeroVisible && ctx) {
+    const dx = mouseX - faceCenterX;
+    const dy = mouseY - faceCenterY;
+    const dist = Math.hypot(dx, dy);
+
+    if (!isMouseActive || dist < deadzoneRadius || isModalOpen || window.scrollY > 150) {
+      inDeadzone = true;
+    } else {
+      inDeadzone = false;
+      const targetAngle = Math.atan2(dy, dx);
+      currentAngle = lerpAngle(currentAngle, targetAngle, LERP_FACTOR);
+    }
+
+    let frameToDraw = centerImage;
+    if (!inDeadzone) {
+      let norm = currentAngle % (2 * Math.PI);
+      if (norm < 0) norm += 2 * Math.PI;
+      const frameIdx = Math.round((norm / (2 * Math.PI)) * TOTAL_FRAMES) % TOTAL_FRAMES;
+      frameToDraw = getNearestLoadedFrame(frameIdx);
+    }
+
+    if (frameToDraw && frameToDraw !== lastDrawnFrame) {
+      drawFrame(frameToDraw);
+    }
+  }
+
+  if (typeof updateTimelineSpiderFn === 'function') {
+    updateTimelineSpiderFn();
+  }
+
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+// 10. MOUSE & TOUCH EVENT LISTENERS
 window.addEventListener('mousemove', (e) => {
+  isMouseActive = true;
   targetMouseX = e.clientX;
   targetMouseY = e.clientY;
   if (cursorDot) {
@@ -44,16 +281,36 @@ window.addEventListener('mousemove', (e) => {
   }
 }, { passive: true });
 
-function updateCursorRing() {
-  if (cursorRing) {
-    ringX += (targetMouseX - ringX) * 0.22;
-    ringY += (targetMouseY - ringY) * 0.22;
-    cursorRing.style.left = `${ringX}px`;
-    cursorRing.style.top = `${ringY}px`;
+window.addEventListener('mouseleave', () => {
+  isMouseActive = false;
+  targetMouseX = faceCenterX;
+  targetMouseY = faceCenterY;
+});
+
+window.addEventListener('touchmove', (e) => {
+  if (e.touches.length > 0) {
+    isMouseActive = true;
+    targetMouseX = e.touches[0].clientX;
+    targetMouseY = e.touches[0].clientY;
   }
-  requestAnimationFrame(updateCursorRing);
+}, { passive: true });
+
+window.addEventListener('touchend', () => {
+  isMouseActive = false;
+  targetMouseX = faceCenterX;
+  targetMouseY = faceCenterY;
+});
+
+// Pause hero canvas rendering when scrolled past hero
+const heroObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    isHeroVisible = entry.isIntersecting;
+  });
+}, { threshold: 0.05 });
+
+if (heroSection) {
+  heroObserver.observe(heroSection);
 }
-requestAnimationFrame(updateCursorRing);
 
 // 8. MAGNETIC BUTTON & CURSOR HOVER EFFECTS
 function attachMagneticEffects() {
@@ -218,6 +475,12 @@ document.querySelectorAll('.nav-link, a[href^="#"]').forEach(anchor => {
 });
 
 // 11. RESUME MODAL & PRINT ACTIONS
+const resumeModal = document.getElementById('panel-resume');
+const btnResume = document.getElementById('btn-resume');
+const btnMobileResume = document.getElementById('btn-mobile-resume');
+const modalCloseBtns = document.querySelectorAll('[data-close]');
+const btnPrintResume = document.getElementById('btn-print-resume');
+
 function openResume() {
   if (resumeModal) {
     resumeModal.classList.add('active');
@@ -237,10 +500,20 @@ function closeResume() {
 if (btnResume) {
   btnResume.addEventListener('click', openResume);
 }
+if (btnMobileResume) {
+  btnMobileResume.addEventListener('click', openResume);
+}
+if (btnPrintResume) {
+  btnPrintResume.addEventListener('click', () => {
+    window.print();
+  });
+}
 
-modalCloseBtns.forEach(btn => {
-  btn.addEventListener('click', closeResume);
-});
+if (modalCloseBtns && modalCloseBtns.length > 0) {
+  modalCloseBtns.forEach(btn => {
+    btn.addEventListener('click', closeResume);
+  });
+}
 
 if (resumeModal) {
   resumeModal.addEventListener('click', (e) => {
@@ -256,239 +529,250 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
-// 12. PROJECTS NAVIGATION (DESKTOP BATCHES + MOBILE 1 CARD AT A TIME)
-const batch1 = document.getElementById('projects-batch-1');
-const batch2 = document.getElementById('projects-batch-2');
-const btnBatchPrev = document.getElementById('btn-batch-prev');
-const btnBatchNext = document.getElementById('btn-batch-next');
+// =========================================================
+// 12. PROJECTS LUXURY HORIZONTAL SLIDING CAROUSEL
+// =========================================================
+function initProjectsSlider() {
+  const track = document.getElementById('projects-slider-track');
+  const viewport = document.querySelector('.projects-slider-viewport');
+  if (!track || !viewport) return;
 
-// Mobile project controls
-const allProjectCards = Array.from(document.querySelectorAll('.projects-carousel-track .project-card'));
-const btnMobileProjPrev = document.getElementById('btn-mobile-project-prev');
-const btnMobileProjNext = document.getElementById('btn-mobile-project-next');
-const mobileProjCurrent = document.getElementById('mobile-project-current');
-const mobileProjTotal = document.getElementById('mobile-project-total');
-const carouselTrack = document.querySelector('.projects-carousel-track');
+  const cards = Array.from(track.querySelectorAll('.project-card'));
+  if (cards.length === 0) return;
 
-let currentBatch = 1;
-let mobileProjectIndex = 0;
+  const prevBtns = [
+    document.getElementById('proj-slider-prev'),
+    document.getElementById('proj-side-prev')
+  ].filter(Boolean);
 
-function showBatch(batchNum) {
-  if (batchNum < 1) batchNum = 1;
-  if (batchNum > 2) batchNum = 2;
-  currentBatch = batchNum;
+  const nextBtns = [
+    document.getElementById('proj-slider-next'),
+    document.getElementById('proj-side-next')
+  ].filter(Boolean);
 
-  if (currentBatch === 1) {
-    if (batch1) batch1.classList.add('active');
-    if (batch2) batch2.classList.remove('active');
-    if (btnBatchPrev) {
-      btnBatchPrev.classList.add('disabled');
-      btnBatchPrev.setAttribute('disabled', 'true');
-    }
-    if (btnBatchNext) {
-      btnBatchNext.classList.remove('disabled');
-      btnBatchNext.removeAttribute('disabled');
-    }
-  } else {
-    if (batch1) batch1.classList.remove('active');
-    if (batch2) batch2.classList.add('active');
-    if (btnBatchPrev) {
-      btnBatchPrev.classList.remove('disabled');
-      btnBatchPrev.removeAttribute('disabled');
-    }
-    if (btnBatchNext) {
-      btnBatchNext.classList.add('disabled');
-      btnBatchNext.setAttribute('disabled', 'true');
+  const dotsContainer = document.getElementById('proj-slider-dots');
+  const tab1 = document.getElementById('proj-tab-1');
+  const tab2 = document.getElementById('proj-tab-2');
+  const switchBtn = document.getElementById('proj-switch-btn');
+  const switchText = document.getElementById('proj-switch-text');
+
+  let currentSlide = 0;
+
+  function getCardsPerView() {
+    if (window.innerWidth <= 640) return 1;
+    if (window.innerWidth <= 960) return 2;
+    return 3;
+  }
+
+  function getGap() {
+    if (window.innerWidth <= 640) return 16;
+    if (window.innerWidth <= 960) return 18;
+    return 24;
+  }
+
+  function getTotalSlides() {
+    return Math.ceil(cards.length / getCardsPerView());
+  }
+
+  function updateCardDimensions() {
+    const cardsPerView = getCardsPerView();
+    const gap = getGap();
+    const vpWidth = viewport.clientWidth || viewport.getBoundingClientRect().width || window.innerWidth;
+    const cardWidth = Math.max(260, (vpWidth - (cardsPerView - 1) * gap) / cardsPerView);
+    track.style.setProperty('--project-card-w', `${cardWidth.toFixed(2)}px`);
+    cards.forEach(c => {
+      c.style.width = `${cardWidth.toFixed(2)}px`;
+      c.style.flex = `0 0 ${cardWidth.toFixed(2)}px`;
+    });
+    return { cardWidth, gap, cardsPerView };
+  }
+
+  function renderDots() {
+    if (!dotsContainer) return;
+    dotsContainer.innerHTML = '';
+    const totalSlides = getTotalSlides();
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('button');
+      dot.className = `slider-dot ${i === currentSlide ? 'active' : ''}`;
+      dot.setAttribute('aria-label', `Slide ${i + 1}`);
+      dot.setAttribute('type', 'button');
+      dot.addEventListener('click', (e) => {
+        e.preventDefault();
+        goToSlide(i);
+      });
+      dotsContainer.appendChild(dot);
     }
   }
 
-  attachMagneticEffects();
-}
+  function updateSlide() {
+    const totalSlides = getTotalSlides();
+    if (currentSlide >= totalSlides) currentSlide = totalSlides - 1;
+    if (currentSlide < 0) currentSlide = 0;
 
-if (btnBatchPrev) {
-  btnBatchPrev.addEventListener('click', () => {
-    if (currentBatch > 1) showBatch(currentBatch - 1);
-  });
-}
+    const { cardWidth, gap, cardsPerView } = updateCardDimensions();
 
-if (btnBatchNext) {
-  btnBatchNext.addEventListener('click', () => {
-    if (currentBatch < 2) showBatch(currentBatch + 1);
-  });
-}
-
-// Mobile Single Project Display Logic (1 Card at a Time)
-function showMobileProject(index) {
-  if (!allProjectCards || allProjectCards.length === 0) return;
-  if (index < 0) index = 0;
-  if (index >= allProjectCards.length) index = allProjectCards.length - 1;
-  mobileProjectIndex = index;
-
-  allProjectCards.forEach((card, i) => {
-    if (i === mobileProjectIndex) {
-      card.classList.add('mobile-active');
+    let offset = 0;
+    if (currentSlide === 0) {
+      offset = 0;
     } else {
-      card.classList.remove('mobile-active');
+      let targetIndex = currentSlide * cardsPerView;
+      if (targetIndex > cards.length - cardsPerView) {
+        targetIndex = Math.max(0, cards.length - cardsPerView);
+      }
+      offset = targetIndex * (cardWidth + gap);
+    }
+
+    track.style.transform = `translate3d(-${offset.toFixed(2)}px, 0, 0)`;
+
+    if (dotsContainer) {
+      const dots = dotsContainer.querySelectorAll('.slider-dot');
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentSlide);
+      });
+    }
+
+    if (tab1 && tab2) {
+      tab1.classList.toggle('active', currentSlide === 0);
+      tab1.setAttribute('aria-selected', currentSlide === 0 ? 'true' : 'false');
+      tab2.classList.toggle('active', currentSlide > 0);
+      tab2.setAttribute('aria-selected', currentSlide > 0 ? 'true' : 'false');
+    }
+
+    if (switchText) {
+      if (currentSlide === 0) {
+        switchText.textContent = 'Slide to view next 3 projects (Meeting Summarizer, Foodie, Prescripto) →';
+      } else {
+        switchText.textContent = '← Slide back to first 3 projects (AcaRAG-Pro, Transac-NOVA, Code Reviewer)';
+      }
+    }
+
+    const counterPill = document.getElementById('proj-counter-pill');
+    if (counterPill) {
+      counterPill.textContent = `${currentSlide + 1} / ${totalSlides}`;
+    }
+
+    prevBtns.forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove('disabled');
+    });
+    nextBtns.forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove('disabled');
+    });
+
+    if (typeof attachMagneticEffects === 'function') {
+      attachMagneticEffects();
+    }
+  }
+
+  function goToSlide(slideIdx) {
+    const totalSlides = getTotalSlides();
+    currentSlide = (slideIdx + totalSlides) % totalSlides;
+    updateSlide();
+  }
+
+  function nextSlide() {
+    const totalSlides = getTotalSlides();
+    currentSlide = (currentSlide + 1) % totalSlides;
+    updateSlide();
+  }
+
+  function prevSlide() {
+    const totalSlides = getTotalSlides();
+    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+    updateSlide();
+  }
+
+  prevBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      prevSlide();
+    });
+  });
+
+  nextBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      nextSlide();
+    });
+  });
+
+  // Delegated global click listener for bulletproof button interaction
+  document.addEventListener('click', (e) => {
+    const prevBtn = e.target.closest('#proj-slider-prev, #proj-side-prev');
+    if (prevBtn) {
+      e.preventDefault();
+      prevSlide();
+      return;
+    }
+
+    const nextBtn = e.target.closest('#proj-slider-next, #proj-side-next');
+    if (nextBtn) {
+      e.preventDefault();
+      nextSlide();
+      return;
     }
   });
 
-  if (mobileProjCurrent) {
-    mobileProjCurrent.textContent = mobileProjectIndex + 1;
-  }
-  if (mobileProjTotal) {
-    mobileProjTotal.textContent = allProjectCards.length;
-  }
-
-  if (btnMobileProjPrev) {
-    btnMobileProjPrev.disabled = (mobileProjectIndex === 0);
-    btnMobileProjPrev.classList.toggle('disabled', mobileProjectIndex === 0);
-  }
-  if (btnMobileProjNext) {
-    btnMobileProjNext.disabled = (mobileProjectIndex === allProjectCards.length - 1);
-    btnMobileProjNext.classList.toggle('disabled', mobileProjectIndex === allProjectCards.length - 1);
-  }
-}
-
-if (btnMobileProjPrev) {
-  btnMobileProjPrev.addEventListener('click', () => {
-    if (mobileProjectIndex > 0) showMobileProject(mobileProjectIndex - 1);
-  });
-}
-
-if (btnMobileProjNext) {
-  btnMobileProjNext.addEventListener('click', () => {
-    if (mobileProjectIndex < allProjectCards.length - 1) showMobileProject(mobileProjectIndex + 1);
-  });
-}
-
-// Touch swipe support on mobile projects track
-if (carouselTrack) {
   let touchStartX = 0;
-  let touchEndX = 0;
+  let touchStartY = 0;
+  let isSwiping = false;
 
-  carouselTrack.addEventListener('touchstart', (e) => {
+  track.addEventListener('touchstart', (e) => {
     if (e.touches && e.touches.length > 0) {
       touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      isSwiping = true;
     }
   }, { passive: true });
 
-  carouselTrack.addEventListener('touchend', (e) => {
-    if (e.changedTouches && e.changedTouches.length > 0) {
-      touchEndX = e.changedTouches[0].clientX;
-      const diffX = touchEndX - touchStartX;
-      if (Math.abs(diffX) > 45) {
-        if (diffX < 0) {
-          // Swipe left -> Next project
-          if (mobileProjectIndex < allProjectCards.length - 1) {
-            showMobileProject(mobileProjectIndex + 1);
-          }
-        } else {
-          // Swipe right -> Previous project
-          if (mobileProjectIndex > 0) {
-            showMobileProject(mobileProjectIndex - 1);
-          }
-        }
+  track.addEventListener('touchend', (e) => {
+    if (!isSwiping || !e.changedTouches || e.changedTouches.length === 0) return;
+    const diffX = e.changedTouches[0].clientX - touchStartX;
+    const diffY = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX < 0) {
+        nextSlide();
+      } else {
+        prevSlide();
       }
     }
-  }, { passive: true });
-}
-
-// Initialize desktop and mobile project states
-showBatch(1);
-showMobileProject(0);
-
-// =========================================================
-// MOBILE PRODUCTS NAVIGATION (1 PRODUCT AT A TIME ON MOBILE)
-// =========================================================
-const allProductItems = Array.from(document.querySelectorAll('.ambient-showcase .ambient-item'));
-const btnMobileProdPrev = document.getElementById('btn-mobile-product-prev');
-const btnMobileProdNext = document.getElementById('btn-mobile-product-next');
-const mobileProdCurrent = document.getElementById('mobile-product-current');
-const mobileProdTotal = document.getElementById('mobile-product-total');
-const ambientShowcase = document.querySelector('.ambient-showcase');
-
-let mobileProductIndex = 0;
-
-function showMobileProduct(index) {
-  if (!allProductItems || allProductItems.length === 0) return;
-  if (index < 0) index = 0;
-  if (index >= allProductItems.length) index = allProductItems.length - 1;
-  mobileProductIndex = index;
-
-  allProductItems.forEach((item, i) => {
-    if (i === mobileProductIndex) {
-      item.classList.add('mobile-active');
-    } else {
-      item.classList.remove('mobile-active');
-    }
-  });
-
-  if (mobileProdCurrent) {
-    mobileProdCurrent.textContent = mobileProductIndex + 1;
-  }
-  if (mobileProdTotal) {
-    mobileProdTotal.textContent = allProductItems.length;
-  }
-
-  if (btnMobileProdPrev) {
-    btnMobileProdPrev.disabled = (mobileProductIndex === 0);
-    btnMobileProdPrev.classList.toggle('disabled', mobileProductIndex === 0);
-  }
-  if (btnMobileProdNext) {
-    btnMobileProdNext.disabled = (mobileProductIndex === allProductItems.length - 1);
-    btnMobileProdNext.classList.toggle('disabled', mobileProductIndex === allProductItems.length - 1);
-  }
-}
-
-if (btnMobileProdPrev) {
-  btnMobileProdPrev.addEventListener('click', () => {
-    if (mobileProductIndex > 0) showMobileProduct(mobileProductIndex - 1);
-  });
-}
-
-if (btnMobileProdNext) {
-  btnMobileProdNext.addEventListener('click', () => {
-    if (mobileProductIndex < allProductItems.length - 1) showMobileProduct(mobileProductIndex + 1);
-  });
-}
-
-// Touch swipe support on ambient showcase
-if (ambientShowcase) {
-  let prodTouchStartX = 0;
-  let prodTouchEndX = 0;
-
-  ambientShowcase.addEventListener('touchstart', (e) => {
-    if (e.touches && e.touches.length > 0) {
-      prodTouchStartX = e.touches[0].clientX;
-    }
+    isSwiping = false;
   }, { passive: true });
 
-  ambientShowcase.addEventListener('touchend', (e) => {
-    if (e.changedTouches && e.changedTouches.length > 0) {
-      prodTouchEndX = e.changedTouches[0].clientX;
-      const diffX = prodTouchEndX - prodTouchStartX;
-      if (Math.abs(diffX) > 45) {
-        if (diffX < 0) {
-          // Swipe left -> Next product
-          if (mobileProductIndex < allProductItems.length - 1) {
-            showMobileProduct(mobileProductIndex + 1);
-          }
-        } else {
-          // Swipe right -> Previous product
-          if (mobileProductIndex > 0) {
-            showMobileProduct(mobileProductIndex - 1);
-          }
-        }
-      }
-    }
-  }, { passive: true });
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      renderDots();
+      updateSlide();
+    }, 100);
+  });
+
+  renderDots();
+  updateSlide();
+
+  // Expose for external access and tests
+  window.portfolioProjectsSlider = {
+    goToSlide,
+    nextSlide,
+    prevSlide,
+    updateSlide,
+    getCurrentSlide: () => currentSlide,
+    getTotalSlides
+  };
 }
 
-showMobileProduct(0);
+initProjectsSlider();
+
+
 
 // 13. INITIALIZATION
-preloadAssets();
-requestAnimationFrame(render);
+if (typeof preloadAssets === 'function') {
+  preloadAssets();
+}
 
 // 14. CONTACT FORM EMAIL SENDER
 const contactForm = document.getElementById('contact-form');
@@ -540,61 +824,72 @@ function initTimelineSpider() {
   const container = document.querySelector('.timeline-container');
   if (!spider || !container) return;
 
-  let scrollStopTimeout = null;
-  let isTicking = false;
   let currentY = 0;
   let targetY = 0;
+  let isCrawling = false;
+  let crawlStopTimeout = null;
 
-  function updateSpiderPosition() {
+  function updateTargetFromClientY(clientY) {
     const rect = container.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
-
-    // Focus target: roughly 42% down the viewport (where reader's eye level rests)
-    const focalPoint = windowHeight * 0.42;
-    const computedY = focalPoint - rect.top;
-
-    // Clamp between top (0) and bottom of timeline (container height - spider height)
     const maxY = Math.max(0, container.offsetHeight - 52);
+    // Align spider vertically with cursor position relative to timeline container
+    const computedY = clientY - rect.top - 24;
     targetY = Math.max(0, Math.min(computedY, maxY));
-
-    // Smooth physics lerp
-    currentY += (targetY - currentY) * 0.28;
-    if (Math.abs(targetY - currentY) < 0.3) {
-      currentY = targetY;
-    }
-
-    spider.style.transform = `translate3d(0, ${currentY}px, 0)`;
-
-    if (Math.abs(targetY - currentY) >= 0.3) {
-      requestAnimationFrame(updateSpiderPosition);
-    } else {
-      isTicking = false;
-    }
-  }
-
-  function handleScroll() {
-    // While scrolling, spider plays active crawling animation
+    isCrawling = true;
     spider.classList.add('is-scrolling');
 
-    if (!isTicking) {
-      isTicking = true;
-      requestAnimationFrame(updateSpiderPosition);
-    }
-
-    // Debounce scroll stop: when user stops scrolling, settle
-    clearTimeout(scrollStopTimeout);
-    scrollStopTimeout = setTimeout(() => {
+    clearTimeout(crawlStopTimeout);
+    crawlStopTimeout = setTimeout(() => {
+      isCrawling = false;
       spider.classList.remove('is-scrolling');
-    }, 200);
+    }, 220);
   }
 
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  window.addEventListener('resize', () => {
-    updateSpiderPosition();
+  // Active cursor tracking when mouse moves
+  window.addEventListener('mousemove', (e) => {
+    updateTargetFromClientY(e.clientY);
   }, { passive: true });
 
-  // Initial placement calculation
-  updateSpiderPosition();
+  // Touch tracking for mobile
+  window.addEventListener('touchmove', (e) => {
+    if (e.touches && e.touches[0]) {
+      updateTargetFromClientY(e.touches[0].clientY);
+    }
+  }, { passive: true });
+
+  // Keep responsive when scrolling
+  window.addEventListener('scroll', () => {
+    const rect = container.getBoundingClientRect();
+    const focalPoint = window.innerHeight * 0.42;
+    const computedY = focalPoint - rect.top - 24;
+    const maxY = Math.max(0, container.offsetHeight - 52);
+    targetY = Math.max(0, Math.min(computedY, maxY));
+    isCrawling = true;
+    spider.classList.add('is-scrolling');
+
+    clearTimeout(crawlStopTimeout);
+    crawlStopTimeout = setTimeout(() => {
+      isCrawling = false;
+      spider.classList.remove('is-scrolling');
+    }, 200);
+  }, { passive: true });
+
+  // 60FPS continuous smooth crawl loop
+  function crawlAnimationLoop() {
+    const diff = targetY - currentY;
+    if (Math.abs(diff) > 0.4) {
+      currentY += diff * 0.16;
+      spider.style.transform = `translate3d(0, ${currentY.toFixed(2)}px, 0)`;
+      spider.classList.add('is-scrolling');
+    } else {
+      if (!isCrawling) {
+        spider.classList.remove('is-scrolling');
+      }
+    }
+    requestAnimationFrame(crawlAnimationLoop);
+  }
+
+  crawlAnimationLoop();
 
   // Playful click interaction: silk bungee hop
   spider.addEventListener('click', (e) => {
@@ -650,12 +945,14 @@ function initContactCopyButtons() {
 // Initialize on DOM ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
+    initProjectsSlider();
     initTimelineSpider();
     initContactCopyButtons();
     initProjectPopout();
     initMobileNavigation();
   });
 } else {
+  initProjectsSlider();
   initTimelineSpider();
   initContactCopyButtons();
   initProjectPopout();

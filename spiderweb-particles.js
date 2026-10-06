@@ -544,7 +544,11 @@
     };
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    new FullWindowWebAtmosphere();
-  });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      window.spiderwebInstance = new FullWindowWebAtmosphere();
+    });
+  } else {
+    window.spiderwebInstance = new FullWindowWebAtmosphere();
+  }
 })();

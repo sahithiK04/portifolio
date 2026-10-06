@@ -2722,7 +2722,7 @@
 }
 
 .contact-link:hover {
-  transform: translateX(8px);
+  transform: none;
   background: rgba(var(--ember-red), 0.08);
   border-color: var(--ember-border-hover);
   box-shadow: 0 12px 30px rgba(var(--ember-red), 0.18);
@@ -2782,12 +2782,15 @@
 .contact-link-arrow {
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.4);
-  transition: transform 0.3s ease, color 0.3s ease;
+  transition: color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .contact-link:hover .contact-link-arrow {
   color: rgb(var(--ember-amber));
-  transform: translate(3px, -3px);
+  transform: none;
 }
 
 .contact-form {

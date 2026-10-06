@@ -35,7 +35,7 @@
   <!-- Devicon icons for technical skills -->
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 
-  <link rel="stylesheet" href="style.css?v=20261006">
+  <link rel="stylesheet" href="style.css?v=20261006n">
 
   <!-- Preload Center Video Frame for Instant Hero Display -->
   <link rel="preload" as="image" href="frames/center.webp?v=20261006" type="image/webp">
@@ -133,10 +133,8 @@
        HERO VIEWPORT (FLORAL HERO PORTRAIT — ZERO LAG, BUTTERY SMOOTH)
        ========================================================= -->
   <section class="hero-container" id="hero">
-    <!-- Floral Portrait Hero Background (Hardware Accelerated, Instant Load) -->
-    <div class="hero-image-wrap">
-      <img src="frames/center.webp" alt="Sai Sahithi Kontam Floral Portrait" class="hero-bg-image" fetchpriority="high" decoding="sync" />
-    </div>
+    <!-- Interactive 60fps Floral Character Canvas (Ultra Smooth, Nearest Frame Fallback) -->
+    <canvas id="character-canvas" class="character-canvas" aria-label="Interactive Floral Portrait of Sai Sahithi"></canvas>
 
     <!-- Hero Content (Bottom-Left) / First Page -->
     <div class="hero-content" aria-label="Hero Introduction">
@@ -168,6 +166,11 @@
        ========================================================= -->
   <main class="content-wrapper" id="content-wrapper">
 
+    <!-- Content Atmosphere: Procedural Glowing Web & Emitting Particles (Page 2 to End) -->
+    <div class="content-web-bg" id="spiderweb-wrap" aria-hidden="true">
+      <canvas class="content-web-canvas" id="spiderweb-canvas"></canvas>
+    </div>
+
     <!-- 00: ABOUT SECTION (5-Line Impact Profile) -->
     <section class="page-section" id="about">
       <div class="section-container">
@@ -180,45 +183,11 @@
 
         <div class="about-card glass-card reveal-on-scroll">
           <div class="about-description">
-            <div class="about-line-row">
-              <span class="about-line-num">01</span>
-              <p class="about-line-text">I am a Backend &amp; Applied AI Engineer specializing in resilient microservices, distributed workflows, and production RAG pipelines.</p>
-            </div>
-            <div class="about-line-row">
-              <span class="about-line-num">02</span>
-              <p class="about-line-text">With industry engineering at Dhan AI and EPICS, I design fault-tolerant systems handling real-time data flows and enterprise CRM integrations.</p>
-            </div>
-            <div class="about-line-row">
-              <span class="about-line-num">03</span>
-              <p class="about-line-text">My technical core centers on Python, FastAPI, Apache Kafka, and optimized retrieval engines that reduce query latency by up to 90%.</p>
-            </div>
-            <div class="about-line-row">
-              <span class="about-line-num">04</span>
-              <p class="about-line-text">I bridge the gap between cutting-edge LLMs and real-world hardware, building end-to-end solutions from IoT telemetry to AI-assisted robotics.</p>
-            </div>
-            <div class="about-line-row">
-              <span class="about-line-num">05</span>
-              <p class="about-line-text">Driven by performance and clean design, I focus on shipping maintainable, high-throughput software that creates tangible, lasting impact.</p>
-            </div>
-          </div>
-
-          <div class="about-stats-grid">
-            <div class="about-stat-item">
-              <span class="about-stat-number">90%</span>
-              <span class="about-stat-label">Latency Reduction via CAG</span>
-            </div>
-            <div class="about-stat-item">
-              <span class="about-stat-number">0.5s</span>
-              <span class="about-stat-label">Sub-Second RAG Queries</span>
-            </div>
-            <div class="about-stat-item">
-              <span class="about-stat-number">6+</span>
-              <span class="about-stat-label">Production &amp; IoT Deployments</span>
-            </div>
-            <div class="about-stat-item">
-              <span class="about-stat-number">9.1</span>
-              <span class="about-stat-label">CGPA in AI &amp; Machine Learning</span>
-            </div>
+            <p class="about-line-text">I am a <strong class="about-highlight">Backend &amp; Applied AI Engineer</strong> specializing in resilient microservices, distributed workflows, and production RAG pipelines.</p>
+            <p class="about-line-text">With industry engineering at <strong class="about-highlight">Dhan AI and EPICS</strong>, I design fault-tolerant systems handling real-time data flows and enterprise CRM integrations.</p>
+            <p class="about-line-text">My technical core centers on <strong class="about-highlight">Python, FastAPI, Apache Kafka</strong>, and optimized retrieval engines that reduce query latency by up to 90%.</p>
+            <p class="about-line-text">I bridge the gap between cutting-edge LLMs and real-world hardware, building end-to-end solutions from <strong class="about-highlight">IoT telemetry to AI-assisted robotics</strong>.</p>
+            <p class="about-line-text">Driven by performance and clean design, I focus on shipping maintainable, high-throughput software that creates <strong class="about-highlight">tangible, lasting impact</strong>.</p>
           </div>
         </div>
       </div>
@@ -243,10 +212,10 @@
 
         <div class="timeline-container reveal-on-scroll">
 
-          <!-- Glowing Bioluminescent Spider Companion (Descends on silk rail) -->
+          <!-- Glowing Bioluminescent Spider Companion (Crawls on timeline rail tracking cursor movement) -->
           <div class="timeline-spider-tracker" id="timeline-spider" aria-label="Luminous spider companion" role="img">
             <div class="timeline-spider-body">
-              <svg viewBox="0 0 70 70" width="52" height="52" fill="none" xmlns="http://www.w3.org/2000/svg" class="spider-svg">
+              <svg viewBox="0 0 70 70" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg" class="spider-svg">
                 <defs>
                   <linearGradient id="spiderPlushGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stop-color="#4a1525" />
@@ -284,23 +253,23 @@
                     <path class="spider-leg leg-r4" d="M41 38 C51 43 54 53 56 62 C58 67 59 72 60 76" stroke="#ff8da1" stroke-width="1.8" stroke-linecap="round" fill="none" />
                   </g>
 
-                  <!-- Pedipalps (Front feelers) -->
+                  <!-- Pedipalps -->
                   <path d="M32 23 C30 18 28 17 26 19" stroke="#ffb8c6" stroke-width="1.5" stroke-linecap="round" fill="none" />
                   <path d="M38 23 C40 18 42 17 44 19" stroke="#ffb8c6" stroke-width="1.5" stroke-linecap="round" fill="none" />
 
-                  <!-- Abdomen (Rear body) -->
+                  <!-- Abdomen -->
                   <ellipse cx="35" cy="42" rx="11" ry="14" fill="url(#spiderPlushGrad)" stroke="#ff758f" stroke-width="1.2" />
 
-                  <!-- Abdomen Bioluminescent Jewel Pattern -->
+                  <!-- Jewel Pattern -->
                   <path d="M35 32 L39 40 L35 52 L31 40 Z" fill="url(#spiderGemGrad)" />
                   <circle cx="35" cy="40" r="2.2" fill="#ffffff" />
                   <circle cx="35" cy="47" r="1.4" fill="#ffd166" />
                   <circle cx="35" cy="35" r="1.2" fill="#ffd166" />
 
-                  <!-- Cephalothorax (Head) -->
+                  <!-- Head -->
                   <ellipse cx="35" cy="27" rx="8" ry="6.5" fill="url(#spiderPlushGrad)" stroke="#ff758f" stroke-width="1.2" />
 
-                  <!-- Glowing Jewel Eyes (Cluster of 6 twinkling jewels) -->
+                  <!-- Glowing Jewel Eyes -->
                   <g class="spider-eyes">
                     <circle cx="33" cy="24.5" r="1.5" fill="#ffffff" />
                     <circle cx="37" cy="24.5" r="1.5" fill="#ffffff" />
@@ -500,11 +469,10 @@
               <div class="timeline-collapsible-inner">
                 <ul class="bullet-list">
                   <li>
-                    Worked with supervised and unsupervised machine learning approaches.
+                    Worked with <strong>supervised and unsupervised machine learning models</strong> to build and evaluate predictive workflows.
                   </li>
                   <li>
-                    Explored feature pipelines, model optimization,
-                    and evaluation using real-world datasets.
+                    Explored <strong>feature pipelines, model optimization</strong>, and evaluation using real-world datasets.
                   </li>
                 </ul>
 
@@ -531,22 +499,33 @@
     <!-- 02: PROJECTS SECTION (BATCHES OF THREE) -->
     <section class="page-section" id="projects">
       <div class="section-container">
-        <div class="reveal-on-scroll">
-          <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-section-header reveal-on-scroll">
+          <div class="projects-header-text">
+            <h2 class="section-title">Featured Projects</h2>
+            <p class="section-lead" style="margin-bottom: 0;">
+              <span class="lead-desktop">From AI experiments to production-grade backend systems — interactive projects showcasing architectures, RAG pipelines, and full-stack solutions.</span>
+              <span class="lead-mobile">Interactive AI &amp; Full-Stack Projects.</span>
+            </p>
+          </div>
+          <div class="projects-nav-controls">
+            <button class="slider-arrow-btn prev magnetic-target" id="proj-slider-prev" aria-label="Previous Projects" type="button" data-cursor="hover">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <span class="slider-counter-pill" id="proj-counter-pill">1 / 2</span>
+            <button class="slider-arrow-btn next magnetic-target" id="proj-slider-next" aria-label="Next Projects" type="button" data-cursor="hover">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <!-- Projects Carousel with Vertically Centered Left/Right Navigation -->
-        <div class="projects-carousel-wrapper reveal-on-scroll">
-          <button class="batch-nav-btn batch-nav-prev magnetic-target" id="btn-batch-prev"
-            aria-label="Previous Projects Batch">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-          </button>
-
-          <div class="projects-carousel-track">
-            <!-- BATCH 1: PROJECTS 1, 2, 3 -->
-            <div class="projects-grid-batch active" id="projects-batch-1">
+        <!-- Slider Viewport and Track -->
+        <div class="projects-slider-wrapper reveal-on-scroll">
+          <div class="projects-slider-viewport">
+            <div class="projects-slider-track" id="projects-slider-track">
               <!-- 1. AcaRAG-Pro -->
               <div class="project-card glass-card">
                 <div class="project-img-wrap">
@@ -645,10 +624,7 @@
                   </svg>
                 </a>
               </div>
-            </div>
 
-            <!-- BATCH 2: PROJECTS 4, 5, 6 -->
-            <div class="projects-grid-batch reveal-on-scroll" id="projects-batch-2">
               <!-- 4. AI Meeting Summarizer -->
               <div class="project-card glass-card">
                 <div class="project-img-wrap">
@@ -749,30 +725,6 @@
               </div>
             </div>
           </div>
-
-          <button class="batch-nav-btn batch-nav-next magnetic-target" id="btn-batch-next"
-            aria-label="Next Projects Batch">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </button>
-
-          <!-- Mobile Only: One Project at a Time Navigation -->
-          <div class="mobile-project-controls" id="mobile-project-controls">
-            <button class="mobile-project-nav-btn" id="btn-mobile-project-prev" aria-label="Previous Project">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="15 18 9 12 15 6"></polyline>
-              </svg>
-            </button>
-            <div class="mobile-project-counter" id="mobile-project-counter">
-              <span>Project</span> <span id="mobile-project-current" class="counter-highlight">1</span> <span class="counter-sep">/</span> <span id="mobile-project-total">6</span>
-            </div>
-            <button class="mobile-project-nav-btn" id="btn-mobile-project-next" aria-label="Next Project">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </button>
-          </div>
         </div>
       </div>
     </section>
@@ -788,13 +740,7 @@
 
         <div class="ambient-showcase reveal-on-scroll">
           <!-- 01. Aqua Guard -->
-          <div class="ambient-item">
-            <div class="ambient-visual">
-              <div class="ambient-img-mask">
-                <img src="aquaguard.jpg" alt="Aqua Guard IoT Water Monitoring" loading="lazy" />
-              </div>
-            </div>
-
+          <div class="ambient-item glass-card">
             <div class="ambient-narrative">
               <span class="ambient-tag">ASU EPICS • IoT &amp; Aquaculture Intelligence</span>
               <h3 class="ambient-title">Aqua Guard Smart Water Monitoring</h3>
@@ -830,13 +776,7 @@
           </div>
 
           <!-- 02. Myosync -->
-          <div class="ambient-item reverse">
-            <div class="ambient-visual">
-              <div class="ambient-img-mask">
-                <img src="myosync.jpg" alt="Myosync Prosthetic Arm Control" loading="lazy" />
-              </div>
-            </div>
-
+          <div class="ambient-item glass-card">
             <div class="ambient-narrative">
               <span class="ambient-tag">ATL Project • Biomedical AI &amp; Robotics</span>
               <h3 class="ambient-title">Myosync Bionic Prosthetic Control</h3>
@@ -870,15 +810,6 @@
               </a>
             </div>
           </div>
-        </div>
-
-        <!-- Mobile Only: One Product at a Time Navigation -->
-        <div class="mobile-product-controls" id="mobile-product-controls">
-          <button class="mobile-project-nav-btn" id="btn-mobile-product-prev" aria-label="Previous Product">&lt;</button>
-          <div class="mobile-project-counter" id="mobile-product-counter">
-            <span>Product</span> <span id="mobile-product-current" class="counter-highlight">1</span> <span class="counter-sep">/</span> <span id="mobile-product-total">2</span>
-          </div>
-          <button class="mobile-project-nav-btn" id="btn-mobile-product-next" aria-label="Next Product">&gt;</button>
         </div>
       </div>
     </section>
@@ -1101,7 +1032,7 @@
                   placeholder="Hi Sai, let's connect regarding an opportunity or engineering project..."
                   required></textarea>
               </div>
-              <button type="submit" id="btn-submit-contact" class="btn btn-primary btn-submit magnetic-target"
+              <button type="submit" id="btn-submit-contact" class="btn btn-primary btn-submit"
                 data-cursor="hover">
                 <span>Send Message</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -1379,7 +1310,9 @@
     </div>
   </div>
 
-  <script src="main.js?v=20261006"></script>
+  <script src="main.js?v=20261006n"></script>
+  <script src="magic-cursor.js?v=20261006e"></script>
+  <script src="spiderweb-particles.js?v=20261006e"></script>
 
   <!-- Clear Stale Service Worker & Caches to ensure 100% static, lag-free experience -->
   <script>

@@ -393,7 +393,11 @@ class MagicLightCursor {
   };
 }
 
-// Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-  new MagicLightCursor();
-});
+// Initialize on DOM ready or immediately if already loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    window.magicCursorInstance = new MagicLightCursor();
+  });
+} else {
+  window.magicCursorInstance = new MagicLightCursor();
+}
